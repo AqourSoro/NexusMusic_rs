@@ -1,6 +1,6 @@
 # About This Project
 
-This project is to build a music player, with more advanced features continuously integrated into it. C++ would be used to implement the music player, so that the project could be regard as an practical programming exercise written in C++.
+This project is to build a music player, with more advanced features continuously integrated into it. Rust would be used to implement the music player, so that the project could be regard as an practical programming exercise written in Rust.
 
 When a version of the software has not been implemented, the description of corresponding version number would be the functional and unfunctional requirements specified to show what is expected to be carry out. As long as the version is updated, the corresponding description would be substituted to the supplement user manual of the version.
 
@@ -24,7 +24,7 @@ When a version of the software has not been implemented, the description of corr
 
 ### 非功能需求
 
-使用C++编写;
+使用Rust编写;
 
 图形交互界面（界面布局，UI图标 etc.）
 
