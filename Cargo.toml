@@ -1,0 +1,13 @@
+[package]
+name = "nexus_music_rs"
+version = "0.1.0"
+edition = "2021"
+authors = ["AqourSoro","C-XiyU"]
+description = "This project is to build a music player, with more advanced features continuously integrated into it. Rust would be used to implement the music player, so that the project could be regard as an practical programming exercise written in Rust."
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+sound_n = {path = "sound_n"}
