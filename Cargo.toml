@@ -10,4 +10,5 @@ description = "This project is to build a music player, with more advanced featu
 
 [dependencies]
 
-sound_n = {path = "sound_n"}
+sound_n    = { path = "sound_n" }
+graphics_n = { path = "graphics_n" }
