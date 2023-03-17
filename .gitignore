@@ -30,3 +30,20 @@
 *.exe
 *.out
 *.app
+
+# Rust related
+target/
+
+.idea/
+.vscode/
+
+Cargo.lock
+Cargo.toml.orig
+
+#VsCode related
+.vscode/
+*.code-workspace
+
+# Added by cargo
+
+/target
