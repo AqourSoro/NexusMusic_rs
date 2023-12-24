@@ -1,7 +1,7 @@
 [package]
 name = "nexus_music_rs"
 version = "0.1.0"
-edition = "2021"
+edition = "2023"
 authors = ["AqourSoro","C-XiyU"]
 description = "This project is to build a music player,  with more advanced features continuously integrated into it. Rust would be used to implement the music player, so that the project could be regard as an practical programming exercise written in Rust."
 
