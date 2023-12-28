@@ -13,3 +13,7 @@ path = "sound_n"
 
 [dependencies.graphics_n]
 path = "graphics_n"
+
+[dependencies]
+log = "0.4"
+log4rs = "1.2.0"

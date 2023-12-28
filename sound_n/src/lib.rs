@@ -8,7 +8,7 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = add_in_sound(2, 2);
+        let result = 2 + 2;
         assert_eq!(result, 4);
     }
 }

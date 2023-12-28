@@ -1,0 +1,9 @@
+appenders:
+  nexus_stdout:
+    kind: console
+    encoder:
+      pattern: "{h({d(%Y-%m-%d %H:%M:%S)} - {l}: {m}{n})}"
+root:
+  level: debug
+  appenders:
+    - nexus_stdout
