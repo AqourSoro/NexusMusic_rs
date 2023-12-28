@@ -1,9 +1,32 @@
 appenders:
   nexus_stdout:
     kind: console
+
     encoder:
       pattern: "{h({d(%Y-%m-%d %H:%M:%S)} - {l}: {m}{n})}"
+
+    filters:
+      - kind: threshold
+        level: debug
+    
+
+  nexus_file_logger:
+    kind: rolling_file
+    path: "log/nexus_music.log"
+    encoder:
+      pattern: "{d(%Y-%m-%d %H:%M:%S)} - {l}: {m}{n}"
+    policy:
+      trigger:
+        kind: size
+        limit: 1mb
+      roller:
+        kind: delete
+    
 root:
-  level: debug
+  level: trace
   appenders:
     - nexus_stdout
+    - nexus_file_logger
+
+  
+
