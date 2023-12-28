@@ -47,3 +47,8 @@ Cargo.toml.orig
 # Added by cargo
 
 /target
+
+
+# log related
+/log
+*.log
