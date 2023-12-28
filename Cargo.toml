@@ -8,6 +8,10 @@ description = "This project is to build a music player,  with more advanced feat
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+name = "nexus_music"
+path = "src/lib.rs"
+
 [dependencies.sound_n]
 path = "sound_n"
 
