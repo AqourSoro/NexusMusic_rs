@@ -24,12 +24,12 @@ use log4rs;
 ///
 /// ```
 /// // Initialize the logger with a custom configuration file path
-/// init_Nexus_Music_logger(Some("custom_config.yaml"));
+/// init_nexus_music_logger(Some("custom_config.yaml"));
 ///
 /// // Initialize the logger using the default configuration file path
-/// init_Nexus_Music_logger(None);
+/// init_nexus_music_logger(None);
 /// ```
-pub fn init_Nexus_Music_logger(config_path: Option<&str>)
+pub fn init_nexus_music_logger(config_path: Option<&str>)
 {
     // let path = match config_path 
     // {
