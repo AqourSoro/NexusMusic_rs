@@ -10,3 +10,4 @@ name = "graphics_nexus"
 path = "src/lib.rs"
 
 [dependencies]
+slint = "1.3.2"
