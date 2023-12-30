@@ -4,10 +4,15 @@ pub mod logs
 }
 
 
-use graphics_nexus;
+use graphics_nexus::{self, show_main_window};
 use sound_nexus;
 use logs::log::*;
 use log::{debug, trace};
+
+pub fn display_window()
+{
+    show_main_window();
+}
 
 
 pub fn crate_usage<FG,FS>(func_graphics:FG, func_sounds:FS) ->usize
