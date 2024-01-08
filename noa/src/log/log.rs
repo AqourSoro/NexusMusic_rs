@@ -3,62 +3,45 @@ use log::{debug, error, info, trace, warn};
 use log4rs;
 
 
-enum NoaLogger
-{
-    
+/// Enum to specify the configuration for the Nexus Music logger.
+pub enum NoaLoggerConfig<'a> {
+    /// Use the default configuration file path.
+    Default,
+    /// Use a custom configuration file path.
+    Custom(&'a str),
 }
 
 
-/// Initializes the Nexus Music logger.
-///
-/// This function sets up the logger configuration based on the provided path
-/// or uses a default path if no path is provided. It initializes the logger
-/// and logs initial messages for tracing and information.
+/// Initializes the Nexus Music logger based on the specified configuration.
 ///
 /// # Arguments
 ///
-/// * `config_path` - An optional string slice representing the path to the logger configuration file.
-///
-/// # Notes
-///
-/// If `config_path` is provided and the path exists, the logger will be initialized with that path.
-/// If `config_path` is provided but the path does not exist, the logger will fall back to a default path.
-/// If `config_path` is not provided (`None`), the logger will use a default path.
+/// * `config_path` - A `NoaLoggerConfig` enum specifying the logger configuration:
+///     - `Default` to use the default configuration file path.
+///     - `Custom` to provide a custom configuration file path.
 ///
 /// # Examples
 ///
 /// ```
-/// // Initialize the logger with a custom configuration file path
-/// init_nexus_music_logger(Some("custom_config.yaml"));
+/// use your_module_name::NoaLoggerConfig;
+/// use your_module_name::init_nexus_music_logger;
 ///
-/// // Initialize the logger using the default configuration file path
-/// init_nexus_music_logger(None);
+/// // Initialize the logger with the default configuration file path
+/// init_nexus_music_logger(NoaLoggerConfig::Default);
+///
+/// // Initialize the logger with a custom configuration file path
+/// init_nexus_music_logger(NoaLoggerConfig::Custom("/path/to/custom/log4rs.yaml"));
 /// ```
-pub fn init_nexus_music_logger(config_path: Option<&str>)
-{
-    // let path = match config_path 
-    // {
-    //     Some(p) if Path::new(p).exists() => p,
-    //     Some(_) => "./config/log4rs.yaml",
-    //     None => "./config/log4rs.yaml",
-    // };
-    // Below is nicer with options implementation!
-
-    let path = config_path.map_or_else(
-        || "./config/log4rs.yaml".to_string(),
-        |p| if Path::new(p).exists() 
-        { 
-            p.to_string() 
-        } 
-        else 
-        { 
-            "./config/log4rs.yaml".to_string() 
-        });
+pub fn init_nexus_music_logger(config_path: NoaLoggerConfig) {
+    let path = match config_path 
+    {
+        NoaLoggerConfig::Custom(p) if Path::new(p).exists() => p,
+        _ => "./config/log4rs.yaml",
+    };
 
     log4rs::init_file(path, Default::default()).unwrap();
     trace!("detailed tracing info for debug in Nexus Music!");
     info!("The main program of Nexus Music in Rust!");
-
 }
 
 
