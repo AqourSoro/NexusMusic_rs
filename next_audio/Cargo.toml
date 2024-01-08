@@ -1,14 +1,16 @@
 [package]
-name = "sound_n"
+name = "next_audio"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "sound_nexus"
+name = "next_audio"
 path = "src/lib.rs"
 
+[dependencies.noa]
+path = "../noa"
 
 [dependencies]
 symphonia = "0.5.3"

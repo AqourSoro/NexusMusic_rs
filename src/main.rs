@@ -1,5 +1,5 @@
 use nexus_music::*;
-use logs::log::*;
+use noa::log::log::*;
 
 fn main() 
 {

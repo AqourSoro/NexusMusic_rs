@@ -1,17 +1,11 @@
-pub mod logs
-{
-    pub mod log;
-}
-
-
-use graphics_nexus::{self, show_main_window};
-use sound_nexus;
-use logs::log::*;
+use noa::log::log::*;
+use next_graphics::{self, show_main_window};
+use next_audio;
 use log::{debug, trace};
 
 pub fn display_window()
 {
-    show_main_window(logs::log::ui_logger);
+    show_main_window();
 }
 
 
@@ -27,9 +21,9 @@ where
 
 pub fn test_logger_usage_with_crates()
 {
-    test_func_logger("graphics_nexus::add_in_graphics",graphics_nexus::add_in_graphics);
-    test_func_logger("sound_nexus::add_in_sound", sound_nexus::add_in_sound);
-    trace!("use functions at the same time: {}", crate_usage(graphics_nexus::add_in_graphics, sound_nexus::add_in_sound))
+    test_func_logger("graphics_nexus::add_in_graphics",next_graphics::add_in_graphics);
+    test_func_logger("sound_nexus::add_in_sound", next_audio::add_in_sound);
+    trace!("use functions at the same time: {}", crate_usage(next_graphics::add_in_graphics, next_audio::add_in_sound))
 }
 
 
@@ -39,7 +33,7 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = crate_usage(graphics_nexus::add_in_graphics, sound_nexus::add_in_sound);
+        let result = crate_usage(next_graphics::add_in_graphics, next_audio::add_in_sound);
         assert_eq!(result, 8);
     }
 }

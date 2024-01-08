@@ -12,11 +12,14 @@ description = "This project is to build a music player,  with more advanced feat
 name = "nexus_music"
 path = "src/lib.rs"
 
-[dependencies.sound_n]
+[dependencies.next_audio]
 path = "next_audio"
 
-[dependencies.graphics_n]
+[dependencies.next_graphics]
 path = "next_graphics"
+
+[dependencies.noa]
+path = "noa"
 
 [dependencies]
 log = "0.4"
