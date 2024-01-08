@@ -13,10 +13,10 @@ name = "nexus_music"
 path = "src/lib.rs"
 
 [dependencies.sound_n]
-path = "sound_n"
+path = "next_audio"
 
 [dependencies.graphics_n]
-path = "graphics_n"
+path = "next_graphics"
 
 [dependencies]
 log = "0.4"

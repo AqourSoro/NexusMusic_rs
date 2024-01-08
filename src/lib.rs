@@ -11,7 +11,7 @@ use log::{debug, trace};
 
 pub fn display_window()
 {
-    show_main_window();
+    show_main_window(logs::log::ui_logger);
 }
 
 

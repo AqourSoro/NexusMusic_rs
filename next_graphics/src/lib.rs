@@ -1,10 +1,12 @@
 slint::include_modules!();
 
-pub fn show_main_window() ->Result<(), slint::PlatformError>
+pub fn show_main_window(logger: impl Fn(String)) ->Result<(), slint::PlatformError>
 {
     let ui = MainWindow::new()?;
 
     let ui_handle_weak = ui.as_weak();
+
+    logger("Main Window".to_string());
 
     ui.run()
 

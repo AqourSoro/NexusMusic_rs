@@ -90,3 +90,9 @@ where
 
     debug!("Test the function {}, result: {}",name, func(2,2));
 }
+
+
+pub fn ui_logger(info: String)
+{
+    info!("UI initialied: {}", info);
+}
