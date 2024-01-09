@@ -1,4 +1,5 @@
-use noa::ui_logger;
+
+use noa::ui_logger_init;
 
 
 slint::include_modules!();
@@ -9,12 +10,17 @@ pub fn show_main_window() ->Result<(), slint::PlatformError>
 
     let ui_handle_weak = ui.as_weak();
 
-    ui_logger("UI is running in show_main_window!".to_string());
+    ui_logger_init(stringify!(show_main_window()), "UI is running now");
 
     ui.run()
 
 }
 
+
+pub fn button_log()
+{
+    
+}
 
 
 pub fn add_in_graphics(left: usize, right: usize) -> usize {
@@ -31,3 +37,4 @@ mod tests {
         assert_eq!(result, 4);
     }
 }
+

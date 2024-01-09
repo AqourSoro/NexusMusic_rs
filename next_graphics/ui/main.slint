@@ -4,7 +4,11 @@ import { Button, VerticalBox } from "std-widgets.slint";
 component NexusButton inherits Button
 {
     
-    clicked => { self.text = self.text + "!"}
+    clicked => 
+    { 
+        self.text = self.text + "!";
+        
+    }
 
 }
 

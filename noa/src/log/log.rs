@@ -1,7 +1,10 @@
+#[path = "ui_log_macros.rs"]
+mod ui_log_macros;
+pub use ui_log_macros::*;
+
 use std::path::{Path, PathBuf};
 use log::{debug, error, info, trace, warn};
 use log4rs;
-
 
 /// Enum to specify the configuration for the Nexus Music logger.
 pub enum NoaLoggerConfig<'a> {
@@ -9,6 +12,21 @@ pub enum NoaLoggerConfig<'a> {
     Default,
     /// Use a custom configuration file path.
     Custom(&'a str),
+}
+
+pub enum LogLevel<'a>
+{
+    TRACE(&'a str),
+    DEBUG(&'a str),
+    INFO(&'a str),
+    WARN(&'a str),
+    ERROR(&'a str)
+}
+
+
+pub trait NoaLog
+{
+    fn log(&self);
 }
 
 
@@ -80,7 +98,12 @@ where
 }
 
 
-pub fn ui_logger(info: String)
+pub fn ui_logger_init(window_name: &str, info: &str)
 {
-    info!("UI initialied: {}", info);
+    ui_info!("UI initialied in {}: {}",window_name, info);
+}
+
+pub fn ui_log()
+{
+    ui_info!("this is UI log!");
 }

@@ -9,8 +9,17 @@ appenders:
       - kind: threshold
         level: debug
     
+  nexus_ui_stdout:
+    kind: console
 
-  nexus_file_logger:
+    encoder:
+      pattern: "{h({d(%Y-%m-%d %H:%M:%S)} - UI {l}: {m}{n})}"
+
+    filters:
+      - kind: threshold
+        level: debug
+
+  nexus_file_out:
     kind: rolling_file
     path: "logs/nexus_music.log"
     encoder:
@@ -21,12 +30,42 @@ appenders:
         limit: 1mb
       roller:
         kind: delete
+  
+  nexus_ui_file_out:
+    kind: rolling_file
+    path: "logs/nexus_music_ui.log"
+    encoder:
+      pattern: "{d(%Y-%m-%d %H:%M:%S)} - UI {l}: {m}{n}"
+    policy:
+      trigger:
+        kind: size
+        limit: 1mb
+      roller:
+        kind: delete
     
+
+loggers:
+  primary_logger:
+    level: trace
+    appenders:
+      - nexus_stdout
+      - nexus_file_out
+    additive: false
+# ensure INFO only prints when ui_logger is not called
+
+  ui_logger:
+    level: debug
+    appenders:
+      - nexus_ui_stdout
+      - nexus_ui_file_out
+    additive: false
+
 root:
   level: trace
   appenders:
     - nexus_stdout
-    - nexus_file_logger
+    - nexus_file_out
+  
 
   
 
