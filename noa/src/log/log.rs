@@ -24,9 +24,10 @@ pub enum LogLevel<'a>
 }
 
 
+//Should impl this trait to auto-log
 pub trait NoaLog
 {
-    fn log(&self);
+    fn log(&self, level: LogLevel);
 }
 
 
@@ -100,10 +101,22 @@ where
 
 pub fn ui_logger_init(window_name: &str, info: &str)
 {
+    
     ui_info!("UI initialied in {}: {}",window_name, info);
 }
 
-pub fn ui_log()
+fn log_logo(is_ui:bool)
 {
+    if(is_ui)
+    {
+        //print ui logo
+
+    }
+    else 
+    {
+        //print console logo
+    }
     ui_info!("this is UI log!");
 }
+
+
