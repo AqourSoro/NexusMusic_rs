@@ -9,7 +9,6 @@ pub mod event
     pub mod event_handler;
 }
 
-pub use log::log::ui_logger_init as ui_logger_init;
 pub use log::log::NoaLoggerConfig as NoaLoggerConfig;
 
 pub fn add(left: usize, right: usize) -> usize {

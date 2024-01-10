@@ -2,7 +2,7 @@
 mod ui_log_macros;
 pub use ui_log_macros::*;
 
-use std::{path::{Path, PathBuf}, f32::consts::E};
+use std::path::Path;
 use log::{debug, error, info, trace, warn};
 use log4rs;
 
@@ -186,13 +186,6 @@ where
     let function_name_str = stringify!(func);
 
     debug!("Test the function {}, result: {}",name, func(2,2));
-}
-
-
-pub fn ui_logger_init(window_name: &str, info: &str)
-{
-    
-    ui_info!("UI initialied in {}: {}",window_name, info);
 }
 
 

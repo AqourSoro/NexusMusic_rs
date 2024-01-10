@@ -18,15 +18,6 @@ where
 }
 
 
-
-pub fn test_logger_usage_with_crates()
-{
-    test_func_logger("graphics_nexus::add_in_graphics",next_graphics::add_in_graphics);
-    test_func_logger("sound_nexus::add_in_sound", next_audio::add_in_sound);
-    trace!("use functions at the same time: {}", crate_usage(next_graphics::add_in_graphics, next_audio::add_in_sound))
-}
-
-
 #[cfg(test)]
 mod tests {
     use super::*;

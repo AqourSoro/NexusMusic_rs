@@ -16,11 +16,6 @@ pub fn show_main_window(logger:&NexusLogger) ->Result<(), slint::PlatformError>
 }
 
 
-pub fn button_log()
-{
-    
-}
-
 
 pub fn add_in_graphics(left: usize, right: usize) -> usize {
     left + right
