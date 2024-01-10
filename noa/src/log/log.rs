@@ -2,7 +2,7 @@
 mod ui_log_macros;
 pub use ui_log_macros::*;
 
-use std::path::{Path, PathBuf};
+use std::{path::{Path, PathBuf}, f32::consts::E};
 use log::{debug, error, info, trace, warn};
 use log4rs;
 
@@ -14,6 +14,7 @@ pub enum NoaLoggerConfig<'a> {
     Custom(&'a str),
 }
 
+#[derive(Debug)]
 pub enum LogLevel<'a>
 {
     TRACE(&'a str),
@@ -23,11 +24,95 @@ pub enum LogLevel<'a>
     ERROR(&'a str)
 }
 
+pub enum LogType
+{
+    Console,
+    UI,
+}
+
+pub trait ConsoleLogger
+{
+    fn log(&self, level: LogLevel, header:&str);
+    fn print_logo(&self);
+}
+
+pub trait UIlogger
+{
+    fn log(&self, level: LogLevel, header:&str);
+    fn print_logo(&self);
+}
 
 //Should impl this trait to auto-log
-pub trait NoaLog
+pub trait NoaLog: ConsoleLogger + UIlogger
 {
-    fn log(&self, level: LogLevel);
+    
+}
+
+pub struct NexusLogger
+{
+
+
+
+}
+
+impl NexusLogger
+{
+    pub fn new(config_path: NoaLoggerConfig) -> Self
+    {
+
+        let instance = NexusLogger
+        {
+
+        };
+        init_nexus_music_logger(config_path);
+        ConsoleLogger::print_logo(&instance);
+        ConsoleLogger::log(&instance, LogLevel::INFO("Nexus Logger in console is initialized!"), "Initialization");
+        UIlogger::print_logo(&instance);
+        UIlogger::log(&instance, LogLevel::INFO("Nexus Logger in UI is initialized!"), "Initialization");
+        instance
+    }
+}
+
+impl ConsoleLogger for NexusLogger
+{
+    fn log(&self, level: LogLevel, header:&str) 
+    {
+        match level 
+        {
+            LogLevel::TRACE(log) => trace!("{} => {}",header,log),
+            LogLevel::DEBUG(log) => debug!("{} => {}",header,log),
+            LogLevel::INFO(log) => info!("{} => {}",header,log),
+            LogLevel::WARN(log) => warn!("{} => {}",header,log),
+            LogLevel::ERROR(log) => error!("{} => {}",header,log)    
+        }
+    }
+
+    fn print_logo(&self) {
+        print_console_logo();
+    }
+}
+
+impl UIlogger for NexusLogger
+{
+    fn log(&self, level: LogLevel, header:&str)
+    {
+        match level 
+        {
+            LogLevel::TRACE(log) => ui_trace!("{} => {}",header,log),
+            LogLevel::DEBUG(log) => ui_debug!("{} => {}",header,log),
+            LogLevel::INFO(log) => ui_info!("{} => {}",header,log),
+            LogLevel::WARN(log) => ui_warn!("{} => {}",header,log),
+            LogLevel::ERROR(log) => ui_error!("{} => {}",header,log)    
+        }
+    }
+
+    fn print_logo(&self) {
+        print_ui_logo();
+    }
+}
+
+impl NoaLog for NexusLogger 
+{
 }
 
 
@@ -51,16 +136,21 @@ pub trait NoaLog
 /// // Initialize the logger with a custom configuration file path
 /// init_nexus_music_logger(NoaLoggerConfig::Custom("/path/to/custom/log4rs.yaml"));
 /// ```
-pub fn init_nexus_music_logger(config_path: NoaLoggerConfig) {
+fn init_nexus_music_logger(config_path: NoaLoggerConfig) {
     let path = match config_path 
     {
         NoaLoggerConfig::Custom(p) if Path::new(p).exists() => p,
         _ => "./config/log4rs.yaml",
     };
 
-    log4rs::init_file(path, Default::default()).unwrap();
-    trace!("detailed tracing info for debug in Nexus Music!");
-    info!("The main program of Nexus Music in Rust!");
+    log4rs::init_file(path, Default::default()).unwrap_or_else(|e| 
+    {
+        error!("{} oocured, Unable to initialize with the given path: {}", e, path);
+        eprint!("There is an error named {} occurs when calling log4rs::init_file with the folloing path: {}, 
+                please check and ensure there exists an YAML file for the configuration!", e, path);
+    });
+    trace!("log4rs is configured with file: {}", path);
+    info!("Nexus Music Logger initialized!");
 }
 
 
@@ -105,18 +195,39 @@ pub fn ui_logger_init(window_name: &str, info: &str)
     ui_info!("UI initialied in {}: {}",window_name, info);
 }
 
-fn log_logo(is_ui:bool)
-{
-    if(is_ui)
-    {
-        //print ui logo
 
-    }
-    else 
-    {
-        //print console logo
-    }
-    ui_info!("this is UI log!");
+fn print_console_logo()
+{
+    info!("***************************");
+    info!("***************************");
+    info!(" _   _                     ");
+    info!("| \\ | |                    ");
+    info!("|  \\| | _____  ___   _ ___ ");
+    info!("| . ` |/ _ \\ \\/ / | | / __|");
+    info!("| |\\  |  __/>  <| |_| \\__ \\");
+    info!("\\_| \\_/\\___/_/\\_\\\\__,_|___/");
+    info!("                           ");
+    info!("***************************");
+    info!("***************************");
+
+
 }
 
-
+fn print_ui_logo()
+{
+    ui_info!("======================================================================");
+    ui_info!("======================================================================");
+    ui_info!("      ___           ___           ___           ___           ___     ");
+    ui_info!("     /\\__\\         /\\  \\         |\\__\\         /\\__\\         /\\  \\    ");
+    ui_info!("    /::|  |       /::\\  \\        |:|  |       /:/  /        /::\\  \\   ");
+    ui_info!("   /:|:|  |      /:/\\:\\  \\       |:|  |      /:/  /        /:/\\ \\  \\  ");
+    ui_info!("  /:/|:|  |__   /::\\~\\:\\  \\      |:|__|__   /:/  /  ___   _\\:\\~\\ \\  \\ ");
+    ui_info!(" /:/ |:| /\\__\\ /:/\\:\\ \\:\\__\\ ____/::::\\__\\ /:/__/  /\\__\\ /\\ \\:\\ \\ \\__\\");
+    ui_info!(" \\/__|:|/:/  / \\:\\~\\:\\ \\/__/ \\::::/~~/~    \\:\\  \\ /:/  / \\:\\ \\:\\ \\/__/");
+    ui_info!("     |:/:/  /   \\:\\ \\:\\__\\    ~~|:|~~|      \\:\\  /:/  /   \\:\\ \\:\\__\\  ");
+    ui_info!("     |::/  /     \\:\\ \\/__/      |:|  |       \\:\\/:/  /     \\:\\/:/  /  ");
+    ui_info!("     /:/  /       \\:\\__\\        |:|  |        \\::/  /       \\::/  /   ");
+    ui_info!("     \\/__/         \\/__/         \\|__|         \\/__/         \\/__/    ");
+    ui_info!("======================================================================");
+    ui_info!("======================================================================");
+}

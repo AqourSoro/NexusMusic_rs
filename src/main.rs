@@ -3,9 +3,11 @@ use noa::log::log::*;
 
 fn main() 
 {
-    init_nexus_music_logger(NoaLoggerConfig::Default);
+
+    let nexus_logger = NexusLogger::new(NoaLoggerConfig::Default);
+
     test_logger_usage_with_crates();
-    display_window();
+    display_window(&nexus_logger);
 }
 
 

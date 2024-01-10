@@ -3,9 +3,9 @@ use next_graphics::*;
 use next_audio;
 use log::{debug, trace};
 
-pub fn display_window()
+pub fn display_window(logger:&NexusLogger)
 {
-    next_graphics::show_main_window();
+    next_graphics::show_main_window(logger);
 }
 
 

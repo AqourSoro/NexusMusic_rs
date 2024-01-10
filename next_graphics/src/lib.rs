@@ -1,16 +1,15 @@
 
-use noa::ui_logger_init;
+use noa::log::log::*;
 
 
 slint::include_modules!();
 
-pub fn show_main_window() ->Result<(), slint::PlatformError>
+pub fn show_main_window(logger:&NexusLogger) ->Result<(), slint::PlatformError>
 {
     let ui = MainWindow::new()?;
 
     let ui_handle_weak = ui.as_weak();
-
-    ui_logger_init(stringify!(show_main_window()), "UI is running now");
+    UIlogger::log(logger, LogLevel::INFO("UI is running now"), stringify!(show_main_window()));
 
     ui.run()
 
