@@ -8,6 +8,13 @@ description = "This project is to build a music player,  with more advanced feat
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[workspace]
+members = [
+    "./noa",
+    "./next_audio",
+    "./next_graphics"
+]
+
 [lib]
 name = "nexus_music"
 path = "src/lib.rs"
@@ -22,5 +29,4 @@ path = "next_graphics"
 path = "noa"
 
 [dependencies]
-log = "0.4"
-log4rs = "1.2.0"
+lazy_static = "1.4.0"

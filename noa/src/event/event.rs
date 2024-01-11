@@ -1,11 +1,9 @@
-use crate::log::log::LogLevel as LogLevel;
 
 #[derive(Debug)]
-pub enum Event<'a>
+pub enum Event
 {
     Key(KeyEvent),
     Click(ClickEvent),
-    Log(LogEvent<'a>),
 }
 
 #[derive(Debug)]
@@ -24,9 +22,7 @@ pub enum ClickEvent
     LongPress,    
 }
 
-#[derive(Debug)]
-pub enum LogEvent<'a>
+pub trait EventHandler
 {
-    ConsoleLog(LogLevel<'a>),
-    UILog(LogLevel<'a>)
+    fn handle_event<'a>(&mut self, event: &'a Event);
 }

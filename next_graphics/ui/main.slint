@@ -1,13 +1,14 @@
 import { Button, VerticalBox } from "std-widgets.slint";
 
 
+
 component NexusButton inherits Button
 {
     
     clicked => 
     { 
         self.text = self.text + "!";
-        
+
     }
 
 }
@@ -20,7 +21,8 @@ export component MainWindow inherits Window
     title: "Nexus Music";
 
     in property <int> text_count : 1;
-    callback button_click <=> btn.clicked;
+    callback button-click <=> btn.clicked;
+    callback window-init();
 
     VerticalBox 
     {
@@ -31,6 +33,7 @@ export component MainWindow inherits Window
         btn := NexusButton // name the NexusButton to "btn"
         {
             text: "Nexus";
+
         }
     }    
 }

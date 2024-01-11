@@ -1,9 +1,7 @@
 use noa::log::log::*;
-use next_graphics::*;
-use next_audio;
-use log::{debug, trace};
 
-pub fn display_window(logger:&NexusLogger)
+
+pub fn display_window(logger:&'static NexusLogger)
 {
     next_graphics::show_main_window(logger);
 }

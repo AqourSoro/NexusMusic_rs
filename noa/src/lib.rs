@@ -6,8 +6,10 @@ pub mod log
 pub mod event
 {
     pub mod event;
-    pub mod event_handler;
+
 }
+
+
 
 pub use log::log::NoaLoggerConfig as NoaLoggerConfig;
 
