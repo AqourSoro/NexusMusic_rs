@@ -20,8 +20,10 @@ export component MainWindow inherits Window
     //Title of the window
     title: "Nexus Music";
 
+    icon: @image-url("../resources/icons/Nexus_logo_s.png");
+
     in property <int> text_count : 1;
-    
+
     callback button-click <=> btn.clicked;
     callback window-init();
 

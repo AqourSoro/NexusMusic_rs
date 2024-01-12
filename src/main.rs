@@ -13,9 +13,9 @@ fn main()
         static ref NEXUS_LOGGER: NexusLogger = NexusLogger::new(NoaLoggerConfig::Default);
     }
 
-    let ui_logger_ref: &'static dyn UILogger = &*NEXUS_LOGGER;
+    let UI_LOGGER: &'static dyn UILogger = &*NEXUS_LOGGER;
 
-    start_window(ui_logger_ref);
+    start_window(UI_LOGGER);
     
     
 }
