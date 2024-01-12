@@ -1,6 +1,7 @@
 pub mod log
 {
     pub mod log;
+    pub mod noa_macros;
 }
 
 pub mod event

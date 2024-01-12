@@ -1,21 +1,24 @@
 
-use noa::log::log::*;
+use noa::{log::log::*, noa_log, noa_ui_log};
 
 
 slint::include_modules!();
 
 pub fn show_main_window(logger:&'static NexusLogger) ->Result<(), slint::PlatformError>
 {
-    let ui = MainWindow::new()?;
-
+    let result = MainWindow::new();
+    let ui = result.and_then(|window|
+    {
+        noa_ui_log!(logger, LogLevel::INFO("UI is initialized"), stringify!(show_main_window()));
+        Ok(window)
+    })?;
+    
     let ui_handle = ui.as_weak();
 
     ui.on_button_click(move||
     {
-        UIlogger::log(logger, LogLevel::DEBUG("button cliked!"), stringify!(ui.on_button_click()));
+        noa_ui_log!(logger, LogLevel::DEBUG("button cliked"), stringify!(ui.on_button_click()));
     });
-
-    UIlogger::log(logger, LogLevel::INFO("UI is running now"), stringify!(show_main_window()));
 
     ui.run()
 

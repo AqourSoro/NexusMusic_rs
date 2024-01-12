@@ -79,4 +79,4 @@ macro_rules! ui_trace {
     });
 }
 
-pub use {ui_error, ui_warn, ui_info, ui_debug, ui_trace};
+pub use {ui_error, ui_warn,ui_info, ui_debug, ui_trace};

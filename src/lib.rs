@@ -1,7 +1,7 @@
 use noa::log::log::*;
 
 
-pub fn display_window(logger:&'static NexusLogger)
+pub fn start_window(logger:&'static NexusLogger)
 {
     next_graphics::show_main_window(logger);
 }

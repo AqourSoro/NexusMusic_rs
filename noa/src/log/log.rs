@@ -3,8 +3,10 @@ mod ui_log_macros;
 pub use ui_log_macros::*;
 
 use std::path::Path;
-use log::{debug, error, info, trace, warn};
+use log::{debug, error, info, trace, warn, log};
 use log4rs;
+
+use crate::{noa_ui_log, noa_log};
 
 /// Enum to specify the configuration for the Nexus Music logger.
 pub enum NoaLoggerConfig<'a> {
@@ -24,6 +26,18 @@ pub enum LogLevel<'a>
     ERROR(&'a str)
 }
 
+impl<'a> LogLevel<'a>
+{
+    pub fn get_message(&'a self) -> &'a str
+    {
+        match self 
+        {
+            LogLevel::TRACE(msg) | LogLevel::DEBUG(msg) | LogLevel::INFO(msg)
+            | LogLevel::WARN(msg) | LogLevel::ERROR(msg) => msg 
+        }
+    }    
+}
+
 pub enum LogType
 {
     Console,
@@ -32,13 +46,13 @@ pub enum LogType
 
 pub trait ConsoleLogger
 {
-    fn log(&self, level: LogLevel, header:&str);
+    fn log(&self, level: LogLevel, header:&str, lines: u32);
     fn print_logo(&self);
 }
 
 pub trait UIlogger
 {
-    fn log(&self, level: LogLevel, header:&str);
+    fn log(&self, level: LogLevel, header:&str, lines: u32);
     fn print_logo(&self);
 }
 
@@ -66,24 +80,28 @@ impl NexusLogger
         };
         init_nexus_music_logger(config_path);
         ConsoleLogger::print_logo(&instance);
-        ConsoleLogger::log(&instance, LogLevel::INFO("Nexus Logger in console is initialized!"), "Initialization");
+        noa_ui_log!(&instance, 
+            LogLevel::INFO("Nexus Logger in console is initialized!"), 
+            "NexusLogger::new(config_path) -> Self");
         UIlogger::print_logo(&instance);
-        UIlogger::log(&instance, LogLevel::INFO("Nexus Logger in UI is initialized!"), "Initialization");
+        noa_ui_log!(&instance, 
+            LogLevel::INFO("Nexus Logger in UI is initialized!"), 
+            "NexusLogger::new(config_path) -> Self");
         instance
     }
 }
 
 impl ConsoleLogger for NexusLogger
 {
-    fn log(&self, level: LogLevel, header:&str) 
+    fn log(&self, level: LogLevel, header:&str, lines: u32) 
     {
         match level 
         {
-            LogLevel::TRACE(log) => trace!("{} => {}",header,log),
-            LogLevel::DEBUG(log) => debug!("{} => {}",header,log),
-            LogLevel::INFO(log) => info!("{} => {}",header,log),
-            LogLevel::WARN(log) => warn!("{} => {}",header,log),
-            LogLevel::ERROR(log) => error!("{} => {}",header,log)    
+            LogLevel::TRACE(log) => trace!("{} on {} => {}",header,lines,log),
+            LogLevel::DEBUG(log) => debug!("{} on {} => {}",header,lines,log),
+            LogLevel::INFO(log) => info!("{} on {} => {}",header,lines,log),
+            LogLevel::WARN(log) => warn!("{} on {} => {}",header,lines,log),
+            LogLevel::ERROR(log) => error!("{} on {} => {}",header,lines,log)    
         }
     }
 
@@ -94,15 +112,15 @@ impl ConsoleLogger for NexusLogger
 
 impl UIlogger for NexusLogger
 {
-    fn log(&self, level: LogLevel, header:&str)
+    fn log(&self, level: LogLevel, header:&str, lines: u32)
     {
         match level 
         {
-            LogLevel::TRACE(log) => ui_trace!("{} => {}",header,log),
-            LogLevel::DEBUG(log) => ui_debug!("{} => {}",header,log),
-            LogLevel::INFO(log) => ui_info!("{} => {}",header,log),
-            LogLevel::WARN(log) => ui_warn!("{} => {}",header,log),
-            LogLevel::ERROR(log) => ui_error!("{} => {}",header,log)    
+            LogLevel::TRACE(log) => ui_trace!("{} on {} => {}",header,lines,log),
+            LogLevel::DEBUG(log) => ui_debug!("{} on {} => {}",header,lines,log),
+            LogLevel::INFO(log) => ui_info!("{} on {} => {}",header,lines,log),
+            LogLevel::WARN(log) => ui_warn!("{} on {} => {}",header,lines,log),
+            LogLevel::ERROR(log) => ui_error!("{} on {} => {}",header,lines,log)    
         }
     }
 
@@ -149,6 +167,7 @@ fn init_nexus_music_logger(config_path: NoaLoggerConfig) {
         eprint!("There is an error named {} occurs when calling log4rs::init_file with the folloing path: {}, 
                 please check and ensure there exists an YAML file for the configuration!", e, path);
     });
+
     trace!("log4rs is configured with file: {}", path);
     info!("Nexus Music Logger initialized!");
 }
