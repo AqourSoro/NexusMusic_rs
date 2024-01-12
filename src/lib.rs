@@ -1,9 +1,8 @@
 use noa::log::log::*;
 
-
-pub fn start_window(logger:&'static NexusLogger)
+pub fn start_window(logger:&'static dyn UILogger)
 {
-    next_graphics::show_main_window(logger);
+    let _ = next_graphics::show_main_window(logger);
 }
 
 

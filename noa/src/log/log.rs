@@ -3,12 +3,13 @@ mod ui_log_macros;
 pub use ui_log_macros::*;
 
 use std::path::Path;
-use log::{debug, error, info, trace, warn, log};
+use log::{debug, error, info, trace, warn};
 use log4rs;
 
-use crate::{noa_ui_log, noa_log};
+use crate::noa_ui_log;
 
 /// Enum to specify the configuration for the Nexus Music logger.
+#[derive(Debug,Clone,Copy,PartialEq)]
 pub enum NoaLoggerConfig<'a> {
     /// Use the default configuration file path.
     Default,
@@ -16,7 +17,7 @@ pub enum NoaLoggerConfig<'a> {
     Custom(&'a str),
 }
 
-#[derive(Debug)]
+#[derive(Debug,Clone,Copy,PartialEq)]
 pub enum LogLevel<'a>
 {
     TRACE(&'a str),
@@ -46,22 +47,45 @@ pub enum LogType
 
 pub trait ConsoleLogger
 {
-    fn log(&self, level: LogLevel, header:&str, lines: u32);
+    fn log(&self, level: LogLevel, header:&str, lines: u32) 
+    {
+        match level 
+        {
+            LogLevel::TRACE(log) => trace!("{} on {} => {}",header,lines,log),
+            LogLevel::DEBUG(log) => debug!("{} on {} => {}",header,lines,log),
+            LogLevel::INFO(log) => info!("{} on {} => {}",header,lines,log),
+            LogLevel::WARN(log) => warn!("{} on {} => {}",header,lines,log),
+            LogLevel::ERROR(log) => error!("{} on {} => {}",header,lines,log)    
+        }
+    }
+
     fn print_logo(&self);
 }
 
-pub trait UIlogger
+pub trait UILogger
 {
-    fn log(&self, level: LogLevel, header:&str, lines: u32);
+    fn log(&self, level: LogLevel, header:&str, lines: u32)
+    {
+        match level 
+        {
+            LogLevel::TRACE(log) => ui_trace!("{} on {} => {}",header,lines,log),
+            LogLevel::DEBUG(log) => ui_debug!("{} on {} => {}",header,lines,log),
+            LogLevel::INFO(log) => ui_info!("{} on {} => {}",header,lines,log),
+            LogLevel::WARN(log) => ui_warn!("{} on {} => {}",header,lines,log),
+            LogLevel::ERROR(log) => ui_error!("{} on {} => {}",header,lines,log)    
+        }
+    }
+
     fn print_logo(&self);
 }
 
 //Should impl this trait to auto-log
-pub trait NoaLog: ConsoleLogger + UIlogger
+pub trait NoaLog: ConsoleLogger + UILogger
 {
     
 }
 
+#[derive(Debug,Clone,Copy,PartialEq)]
 pub struct NexusLogger
 {
 
@@ -83,7 +107,7 @@ impl NexusLogger
         noa_ui_log!(&instance, 
             LogLevel::INFO("Nexus Logger in console is initialized!"), 
             "NexusLogger::new(config_path) -> Self");
-        UIlogger::print_logo(&instance);
+        UILogger::print_logo(&instance);
         noa_ui_log!(&instance, 
             LogLevel::INFO("Nexus Logger in UI is initialized!"), 
             "NexusLogger::new(config_path) -> Self");
@@ -93,38 +117,19 @@ impl NexusLogger
 
 impl ConsoleLogger for NexusLogger
 {
-    fn log(&self, level: LogLevel, header:&str, lines: u32) 
-    {
-        match level 
-        {
-            LogLevel::TRACE(log) => trace!("{} on {} => {}",header,lines,log),
-            LogLevel::DEBUG(log) => debug!("{} on {} => {}",header,lines,log),
-            LogLevel::INFO(log) => info!("{} on {} => {}",header,lines,log),
-            LogLevel::WARN(log) => warn!("{} on {} => {}",header,lines,log),
-            LogLevel::ERROR(log) => error!("{} on {} => {}",header,lines,log)    
-        }
-    }
+    
 
-    fn print_logo(&self) {
+    fn print_logo(&self) 
+    {
         print_console_logo();
     }
 }
 
-impl UIlogger for NexusLogger
+impl UILogger for NexusLogger
 {
-    fn log(&self, level: LogLevel, header:&str, lines: u32)
+    
+    fn print_logo(&self) 
     {
-        match level 
-        {
-            LogLevel::TRACE(log) => ui_trace!("{} on {} => {}",header,lines,log),
-            LogLevel::DEBUG(log) => ui_debug!("{} on {} => {}",header,lines,log),
-            LogLevel::INFO(log) => ui_info!("{} on {} => {}",header,lines,log),
-            LogLevel::WARN(log) => ui_warn!("{} on {} => {}",header,lines,log),
-            LogLevel::ERROR(log) => ui_error!("{} on {} => {}",header,lines,log)    
-        }
-    }
-
-    fn print_logo(&self) {
         print_ui_logo();
     }
 }
@@ -202,7 +207,7 @@ where
     F: Fn(usize, usize) -> usize,
 {
 
-    let function_name_str = stringify!(func);
+    let _function_name_str = stringify!(func);
 
     debug!("Test the function {}, result: {}",name, func(2,2));
 }
@@ -229,6 +234,7 @@ fn print_ui_logo()
 {
     ui_info!("======================================================================");
     ui_info!("======================================================================");
+    ui_info!("                                                                      ");
     ui_info!("      ___           ___           ___           ___           ___     ");
     ui_info!("     /\\__\\         /\\  \\         |\\__\\         /\\__\\         /\\  \\    ");
     ui_info!("    /::|  |       /::\\  \\        |:|  |       /:/  /        /::\\  \\   ");
@@ -240,6 +246,7 @@ fn print_ui_logo()
     ui_info!("     |::/  /     \\:\\ \\/__/      |:|  |       \\:\\/:/  /     \\:\\/:/  /  ");
     ui_info!("     /:/  /       \\:\\__\\        |:|  |        \\::/  /       \\::/  /   ");
     ui_info!("     \\/__/         \\/__/         \\|__|         \\/__/         \\/__/    ");
+    ui_info!("                                                                      ");
     ui_info!("======================================================================");
     ui_info!("======================================================================");
 }

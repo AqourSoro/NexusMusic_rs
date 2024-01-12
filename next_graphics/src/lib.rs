@@ -1,10 +1,10 @@
 
-use noa::{log::log::*, noa_log, noa_ui_log};
+use noa::{log::log::*,noa_ui_log};
 
 
 slint::include_modules!();
 
-pub fn show_main_window(logger:&'static NexusLogger) ->Result<(), slint::PlatformError>
+pub fn show_main_window(logger:&'static dyn UILogger) ->Result<(), slint::PlatformError>
 {
     let result = MainWindow::new();
     let ui = result.and_then(|window|
@@ -13,7 +13,7 @@ pub fn show_main_window(logger:&'static NexusLogger) ->Result<(), slint::Platfor
         Ok(window)
     })?;
     
-    let ui_handle = ui.as_weak();
+    let _ui_handle = ui.as_weak();
 
     ui.on_button_click(move||
     {

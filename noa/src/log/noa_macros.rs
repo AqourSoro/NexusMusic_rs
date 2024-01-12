@@ -50,7 +50,7 @@ macro_rules! noa_log {
 #[macro_export]
 macro_rules! noa_ui_log {
     ($logger:expr, $level:expr, $log:expr) => {{
-        let logger: &dyn UIlogger = &*$logger;
+        let logger: &dyn UILogger = &*$logger;
         logger.log($level, $log, line!());
     }};
 }
