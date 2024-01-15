@@ -51,11 +51,11 @@ pub trait ConsoleLogger
     {
         match level 
         {
-            LogLevel::TRACE(log) => trace!("{} on {} => {}",header,lines,log),
-            LogLevel::DEBUG(log) => debug!("{} on {} => {}",header,lines,log),
-            LogLevel::INFO(log) => info!("{} on {} => {}",header,lines,log),
-            LogLevel::WARN(log) => warn!("{} on {} => {}",header,lines,log),
-            LogLevel::ERROR(log) => error!("{} on {} => {}",header,lines,log)    
+            LogLevel::TRACE(log) => trace!("{} on line {} => {}",header,lines,log),
+            LogLevel::DEBUG(log) => debug!("{} on line {} => {}",header,lines,log),
+            LogLevel::INFO(log) => info!("{} on line {} => {}",header,lines,log),
+            LogLevel::WARN(log) => warn!("{} on line {} => {}",header,lines,log),
+            LogLevel::ERROR(log) => error!("{} on line {} => {}",header,lines,log)    
         }
     }
 
@@ -68,11 +68,11 @@ pub trait UILogger
     {
         match level 
         {
-            LogLevel::TRACE(log) => ui_trace!("{} on {} => {}",header,lines,log),
-            LogLevel::DEBUG(log) => ui_debug!("{} on {} => {}",header,lines,log),
-            LogLevel::INFO(log) => ui_info!("{} on {} => {}",header,lines,log),
-            LogLevel::WARN(log) => ui_warn!("{} on {} => {}",header,lines,log),
-            LogLevel::ERROR(log) => ui_error!("{} on {} => {}",header,lines,log)    
+            LogLevel::TRACE(log) => ui_trace!("{} on line {} => {}",header,lines,log),
+            LogLevel::DEBUG(log) => ui_debug!("{} on line {} => {}",header,lines,log),
+            LogLevel::INFO(log) => ui_info!("{} on line {} => {}",header,lines,log),
+            LogLevel::WARN(log) => ui_warn!("{} on line {} => {}",header,lines,log),
+            LogLevel::ERROR(log) => ui_error!("{} on line {} => {}",header,lines,log)    
         }
     }
 

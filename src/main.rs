@@ -13,9 +13,11 @@ fn main()
         static ref NEXUS_LOGGER: NexusLogger = NexusLogger::new(NoaLoggerConfig::Default);
     }
 
-    let UI_LOGGER: &'static dyn UILogger = &*NEXUS_LOGGER;
+    let ui_logger: &'static dyn UILogger = &*NEXUS_LOGGER;
 
-    start_window(UI_LOGGER);
+    let title = String::from("Nexus Music");
+
+    start_window(ui_logger, title);
     
     
 }

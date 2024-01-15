@@ -19,22 +19,49 @@ export component MainWindow inherits Window
 
     //Title of the window
     title: "Nexus Music";
-
     icon: @image-url("../resources/icons/Nexus_logo_s.png");
+    background: @linear-gradient(0deg,#000000 0%,#7b6c6c 50%,#ffc5c5 100%);
+    default-font-family: "Noto Sans";
+
+    height: 720px;
+    width: 1080px;
+    
 
     in property <int> text_count : 1;
+    in-out property <string> app_text;
+    in property <string> init_content: "Initialized";
+    
 
     callback button-click <=> btn.clicked;
-    callback window-init();
+    callback window-init(string);
+
+    init => 
+    {
+        window-init(init_content);
+    }
+
+    window-init(init_text) => 
+    {
+        app_text =init_text;
+    }
+
 
     VerticalBox 
     {
+
+        spacing: 5px;
+
+
         Text 
         {
-            text: "Hello Nexus Music!";
+            height: 600px;
+            font-size: 100px;
+            text: app_text;
         }
         btn := NexusButton // name the NexusButton to "btn"
         {
+            width: 100px;
+            opacity:0.5;
             text: "Nexus";
             
         }

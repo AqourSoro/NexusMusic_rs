@@ -1,10 +1,10 @@
-
 use noa::{log::log::*,noa_ui_log};
+use slint::SharedString;
 
 
 slint::include_modules!();
 
-pub fn show_main_window(logger:&'static dyn UILogger) ->Result<(), slint::PlatformError>
+pub fn show_main_window(logger:&'static dyn UILogger, main_title:String) ->Result<(), slint::PlatformError>
 {
     let result = MainWindow::new();
     let ui = result.and_then(|window|
@@ -15,10 +15,22 @@ pub fn show_main_window(logger:&'static dyn UILogger) ->Result<(), slint::Platfo
     
     let _ui_handle = ui.as_weak();
 
-    ui.on_button_click(move||
+    let _title = SharedString::from(main_title);
+
+    ui.on_window_init(move|title|
     {
-        noa_ui_log!(logger, LogLevel::DEBUG("button cliked"), stringify!(ui.on_button_click()));
+        let ui = _ui_handle.unwrap();
+        ui.set_app_text(title);
+        noa_ui_log!(logger, LogLevel::INFO("Slint UI is initialized"), stringify!(show_main_window()));
     });
+
+    ui.on_button_click(move||
+        {
+            noa_ui_log!(logger, LogLevel::DEBUG("button cliked"), stringify!(ui.on_button_click()));
+        });
+
+
+    ui.invoke_window_init(_title);
 
     ui.run()
 
