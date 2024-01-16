@@ -1,0 +1,66 @@
+import "./fonts/fusion-pixel-10px-proportional.ttc";
+
+export component InWindowTopBar inherits VerticalLayout
+{
+    height: 30px;
+    width: 1080px;
+
+    in property <string> title;
+    in-out property <string> font;
+    in property <brush> titleColor;
+
+    callback close();
+
+    Rectangle 
+    {
+        height: 25px;
+        background: #ffc5c5;
+
+        HorizontalLayout 
+        {
+            padding-left: 5px;
+            padding-right: 5px;
+            ApplicationTitle := Text 
+            {
+                font-family: font;
+                text: title;
+                font-size: 15px;
+                color: white;
+            }
+
+            Rectangle 
+            {
+                y: 5px;
+                width: 14px;
+                height: 14px;
+                border-radius: 3px;
+                background: darkred;
+
+                opacity: 1;
+
+                touch := TouchArea
+                {
+                    clicked => 
+                    { 
+                        close() 
+                    }
+                }
+
+                Text 
+                {
+                    text: "X";
+                    color:touch.has-hover? touch.pressed? red : pink : white;
+                }
+
+            }
+
+        }
+    }
+
+    
+    
+
+    
+
+
+}
