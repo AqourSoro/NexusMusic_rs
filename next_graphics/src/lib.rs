@@ -1,4 +1,4 @@
-use noa::{log::log::*,noa_ui_log};
+use noa::{log::log::*,noa_ui_log, noa_log};
 use slint::{SharedString, Weak};
 
 
@@ -48,7 +48,10 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger)
 
     ui.on_window_close(move ||
     {
+        noa_ui_log!(logger, LogLevel::DEBUG("close window button clicked"), stringify!(ui.on_window_close()));
+        
         main.hide().unwrap();
+        noa_ui_log!(logger, LogLevel::INFO("Application closed."), stringify!(ui.on_window_close()));
     });
 
 }
