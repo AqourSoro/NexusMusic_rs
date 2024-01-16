@@ -1,26 +1,8 @@
 import { Button} from "std-widgets.slint";
-import { InWindowTopBar} from "topBar.slint";
 // import  "./fonts/ark-pixel-10px-proportional.ttc";
 // import "./fonts/VonwaonBitmap-12px.ttf";
 import "./fonts/fusion-pixel-10px-proportional.ttc";
-import { InWindowTopBar } from "TopBar.slint";
-
-
-component CloseButton inherits Rectangle
-{
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
-    background: root.border-color;
-    touch := TouchArea
-    {
-        clicked => 
-        {
-
-        }
-    }
-}
-
+import { InWindowTopBar } from "topBarPixel.slint";
 
 
 component NexusButton inherits Button
@@ -59,6 +41,7 @@ export component MainWindow inherits Window
 
     callback button1-click <=> btn.clicked;
     callback window-init(string);
+    callback drag-window(length,length);
     callback window-close();
 
     init => 
@@ -76,11 +59,18 @@ export component MainWindow inherits Window
     {
 
         spacing: 5px;
+        
 
         InWindowTopBar 
         {
             title: root.title;
             font: "Fusion Pixel 10px Proportional zh_hans";
+
+            move-window(offsetX, offsetY) =>
+            {
+                drag-window(offsetX, offsetY);
+            }
+
             close => 
             {
                 window-close();

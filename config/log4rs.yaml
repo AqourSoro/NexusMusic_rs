@@ -54,7 +54,7 @@ loggers:
 # ensure INFO only prints when ui_logger is not called
 
   ui_logger:
-    level: debug
+    level: trace
     appenders:
       - nexus_ui_stdout
       - nexus_ui_file_out

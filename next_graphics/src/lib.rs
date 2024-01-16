@@ -1,5 +1,5 @@
 use noa::{log::log::*,noa_ui_log, noa_log};
-use slint::{SharedString, Weak};
+use slint::{SharedString, Weak, LogicalPosition};
 
 
 slint::include_modules!();
@@ -32,13 +32,15 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger)
 
     let ui = ui_handler.unwrap();
 
-    let main = ui_handler.unwrap();
+    let ui_to_close = ui_handler.unwrap();
+
+    let ui_to_move = ui_handler.unwrap().as_weak();
 
     ui.on_window_init(move|title|
     {
         let ui = ui_handler.unwrap();
         ui.set_app_text(title);
-        noa_ui_log!(logger, LogLevel::INFO("Slint UI is initialized"), stringify!(show_main_window()));
+        noa_ui_log!(logger, LogLevel::INFO("Slint UI is initialized"), stringify!(show_main_window(title:SharedString)));
     });
 
     ui.on_button1_click(move||
@@ -46,11 +48,26 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger)
         noa_ui_log!(logger, LogLevel::DEBUG("button cliked"), stringify!(ui.on_button1_click()));
     });
 
+    ui.on_drag_window(move |offset_x, offset_y|
+    {
+        let main = ui_to_move.upgrade().unwrap();
+
+        let previous_pos = main.window().position().to_logical(main.window().scale_factor());
+
+        let _new_x = previous_pos.x + offset_x;
+        let _new_y = previous_pos.y + offset_y;
+
+        main.window().set_position(LogicalPosition::new(_new_x, _new_y));
+        let location_log = format!("Window moved to new location: x: {}, y: {}", _new_x, _new_y);
+        noa_ui_log!(logger, LogLevel::TRACE(location_log.as_str()), stringify!(ui.on_drag_window(offset_x:f32, offset_y:f32)));
+
+    });
+
     ui.on_window_close(move ||
     {
         noa_ui_log!(logger, LogLevel::DEBUG("close window button clicked"), stringify!(ui.on_window_close()));
         
-        main.hide().unwrap();
+        ui_to_close.hide().unwrap();
         noa_ui_log!(logger, LogLevel::INFO("Application closed."), stringify!(ui.on_window_close()));
     });
 

@@ -9,6 +9,13 @@ export component InWindowTopBar inherits VerticalLayout
     in-out property <string> font;
     in property <brush> titleColor;
 
+    // if mouse button is pressed.
+    property <bool> drag-area-pressed: false;
+    // record the position of the press.
+    property <length> drag-area-down-x: 0;
+    property <length> drag-area-down-y: 0;
+
+    callback move-window(length, length);
     callback close();
 
     Rectangle 
@@ -18,15 +25,36 @@ export component InWindowTopBar inherits VerticalLayout
 
         HorizontalLayout 
         {
+
             padding-left: 5px;
             padding-right: 5px;
+
             ApplicationTitle := Text 
             {
                 font-family: font;
                 text: title;
                 font-size: 15px;
                 color: white;
+                TouchArea 
+                {
+                    moved => 
+                    {
+                        move-window(self.mouse-x - drag-area-down-x, 
+                                    self.mouse-y - drag-area-down-y);
+                    }
+                    pointer-event(e) => 
+                    {
+                        drag-area-pressed = e.kind == PointerEventKind.down;
+                        drag-area-down-x = self.mouse-x;
+                        drag-area-down-y = self.mouse-y;
+                    }
+                }
             }
+
+            
+
+            
+            
 
             Rectangle 
             {
