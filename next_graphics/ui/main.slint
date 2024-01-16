@@ -1,10 +1,17 @@
-import { Button, VerticalBox } from "std-widgets.slint";
+import { Button, VerticalBox, HorizontalBox } from "std-widgets.slint";
+// import  "./fonts/ark-pixel-10px-proportional.ttc";
+// import "./fonts/VonwaonBitmap-12px.ttf";
+import "./fonts/fusion-pixel-10px-proportional.ttc";
+component InWindowTopBorder inherits Rectangle 
+{
 
+}
 
 
 component NexusButton inherits Button
 {
     
+
     clicked => 
     { 
         self.text = self.text + "!";
@@ -18,10 +25,11 @@ export component MainWindow inherits Window
 {
 
     //Title of the window
+    default-font-family: "Ark Pixel 10px Proportional zh_cn";
     title: "Nexus Music";
     icon: @image-url("../resources/icons/Nexus_logo_s.png");
     background: @linear-gradient(0deg,#000000 0%,#7b6c6c 50%,#ffc5c5 100%);
-    default-font-family: "Noto Sans";
+    no-frame: false;
 
     height: 720px;
     width: 1080px;
@@ -30,9 +38,8 @@ export component MainWindow inherits Window
     in property <int> text_count : 1;
     in-out property <string> app_text;
     in property <string> init_content: "Initialized";
-    
 
-    callback button-click <=> btn.clicked;
+    callback button1-click <=> btn.clicked;
     callback window-init(string);
 
     init => 
@@ -42,28 +49,42 @@ export component MainWindow inherits Window
 
     window-init(init_text) => 
     {
-        app_text =init_text;
+        app_text = init_text;
     }
-
 
     VerticalBox 
     {
 
         spacing: 5px;
 
-
         Text 
         {
             height: 600px;
-            font-size: 100px;
-            text: app_text;
+            font-size: 50px;
+            font-family: "Fusion Pixel 10px Proportional zh_hans";
+
+            text: app_text + " 你好！";
         }
-        btn := NexusButton // name the NexusButton to "btn"
+
+        HorizontalBox 
         {
-            width: 100px;
-            opacity:0.5;
-            text: "Nexus";
-            
+            spacing: 5px;
+            btn := NexusButton // name the NexusButton to "btn"
+            {
+                width: 100px;
+                opacity:0.5;
+                text: "Nexus";
+            }
+
+            btn2 := NexusButton
+            {
+                width: 100px;
+                opacity:0.5;
+                text: "";
+            }
         }
+
+        
+
     }    
 }

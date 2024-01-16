@@ -24,9 +24,9 @@ pub fn show_main_window(logger:&'static dyn UILogger, main_title:String) ->Resul
         noa_ui_log!(logger, LogLevel::INFO("Slint UI is initialized"), stringify!(show_main_window()));
     });
 
-    ui.on_button_click(move||
+    ui.on_button1_click(move||
         {
-            noa_ui_log!(logger, LogLevel::DEBUG("button cliked"), stringify!(ui.on_button_click()));
+            noa_ui_log!(logger, LogLevel::DEBUG("button cliked"), stringify!(ui.on_button1_click()));
         });
 
 
