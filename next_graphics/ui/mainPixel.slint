@@ -1,8 +1,12 @@
 import { Button} from "std-widgets.slint";
+import { InWindowTopBar } from "./components/topBarPixel.slint";
+import { SideList } from "./components/sideListPixel.slint";
+
 // import  "./fonts/ark-pixel-10px-proportional.ttc";
 // import "./fonts/VonwaonBitmap-12px.ttf";
 import "./fonts/fusion-pixel-10px-proportional.ttc";
-import { InWindowTopBar } from "topBarPixel.slint";
+
+
 
 
 component NexusButton inherits Button
@@ -90,16 +94,28 @@ export component MainWindow inherits Window
                 
                 VerticalLayout
                 {
-                    padding: 5px;
+                    spacing: 5px;
 
-                    Text 
+
+                    HorizontalLayout 
                     {
-                        height: 600px;
-                        font-size: 50px;
-                        font-family: "Fusion Pixel 10px Proportional zh_hans";
+                        spacing: 5px;
+                        SideList 
+                        {
 
-                        text: app_text + " 你好！";
+                        }
+
+                        Text 
+                        {
+                            height: 600px;
+                            font-size: 50px;
+                            font-family: "Fusion Pixel 10px Proportional zh_hans";
+
+                            text: app_text + " 你好！";
+                        }
                     }
+
+                    
 
                     HorizontalLayout
                     {
