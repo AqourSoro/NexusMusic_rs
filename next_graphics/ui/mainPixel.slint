@@ -25,7 +25,7 @@ export component MainWindow inherits Window
     
     title: "Nexus Music";
     icon: @image-url("../resources/icons/Nexus_logo_s.png");
-    background: @linear-gradient(0deg,#000000 0%,#7b6c6c 50%,#ffc5c5 100%);
+    //background: @linear-gradient(0deg,#000000 0%,#7b6c6c 50%,#ffc5c5 100%);
     no-frame: true;
 
     height: 720px;
@@ -54,64 +54,68 @@ export component MainWindow inherits Window
     {
         app_text = init_text;
     }
-
-    VerticalLayout
+    Rectangle 
     {
-
-        spacing: 5px;
+        background: @linear-gradient(0deg,#000000 0%,#7b6c6c 50%,#ffc5c5 100%);
+        border-radius: 3px;
+        clip: true;
         
-
-        InWindowTopBar 
-        {
-            title: root.title;
-            font: "Fusion Pixel 10px Proportional zh_hans";
-
-            move-window(offsetX, offsetY) =>
-            {
-                drag-window(offsetX, offsetY);
-            }
-
-            close => 
-            {
-                window-close();
-            }
-        }
-
         VerticalLayout
         {
-            padding: 5px;
 
-            Text 
+            spacing: 5px;
+            
+
+            InWindowTopBar 
             {
-                height: 600px;
-                font-size: 50px;
-                font-family: "Fusion Pixel 10px Proportional zh_hans";
 
-                text: app_text + " 你好！";
-            }
+                title: root.title;
+                font: "Fusion Pixel 10px Proportional zh_hans";
 
-            HorizontalLayout
-            {
-                spacing: 5px;
-                btn := NexusButton // name the NexusButton to "btn"
+                move-window(offsetX, offsetY) =>
                 {
-                    width: 100px;
-                    opacity:0.5;
-                    text: "Nexus";
+                    drag-window(offsetX, offsetY);
                 }
 
-                btn2 := NexusButton
+                close => 
                 {
-                    width: 100px;
-                    opacity:0.5;
-                    text: "";
+                    window-close();
+                }
+            }
+
+            VerticalLayout
+            {
+                padding: 5px;
+
+                Text 
+                {
+                    height: 600px;
+                    font-size: 50px;
+                    font-family: "Fusion Pixel 10px Proportional zh_hans";
+
+                    text: app_text + " 你好！";
+                }
+
+                HorizontalLayout
+                {
+                    spacing: 5px;
+                    btn := NexusButton // name the NexusButton to "btn"
+                    {
+                        width: 100px;
+                        opacity:0.5;
+                        text: "Nexus";
+                    }
+
+                    btn2 := NexusButton
+                    {
+                        width: 100px;
+                        opacity:0.5;
+                        text: "";
+                    }
                 }
             }
         }
+    }
 
-        
-
-        
-
-    }    
+    
 }

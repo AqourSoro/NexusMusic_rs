@@ -51,7 +51,7 @@ pub trait ConsoleLogger
     {
         match level 
         {
-            LogLevel::TRACE(log) => trace!("{} => on line {}, in {}",log,lines,location),
+            LogLevel::TRACE(log) => trace!("{} => on line {}, in {}",log,location,lines),
             LogLevel::DEBUG(log) => debug!("{} => on line {}, in {}",log,lines,location),
             LogLevel::INFO(log) => info!("{} => on line {}, in {}",log,lines,location),
             LogLevel::WARN(log) => warn!("{} => on line {}, in {}",log,lines,location),
