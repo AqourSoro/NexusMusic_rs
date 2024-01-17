@@ -14,7 +14,7 @@ export component InWindowTopBar inherits VerticalLayout
     // record the position of the press.
     property <length> drag-area-down-x: 0;
     property <length> drag-area-down-y: 0;
-    property <length> corner-radius: 3px;
+    property <length> corner-radius: 8px;
 
     callback move-window(length, length);
     callback close();
@@ -29,7 +29,7 @@ export component InWindowTopBar inherits VerticalLayout
         {
 
             //padding-right: 5px;
-            spacing: 5px;
+            spacing: 10px;
 
 
             Rectangle 
@@ -56,9 +56,9 @@ export component InWindowTopBar inherits VerticalLayout
 
             ApplicationTitle := Text 
             {
-                font-family: font;
+                font-family: "Fusion Pixel 10px Proportional zh_hans";
                 text: title;
-                font-size: 15px;
+                font-size: root.height * 63%;
                 color: white;
                 TouchArea 
                 {
@@ -88,7 +88,7 @@ export component InWindowTopBar inherits VerticalLayout
                 height: root.height;
                 
                 border-radius: corner-radius;
-                background: pink;
+                background: touch.has-hover? touch.pressed? darkred : #fc9494 : #ffc5c500;
 
                 opacity: 1;
 
@@ -103,7 +103,7 @@ export component InWindowTopBar inherits VerticalLayout
                 Text 
                 {
                     text: "X";
-                    font-size: root.height * 80%;
+                    font-size: root.height * 85%;
                     color:touch.has-hover? touch.pressed? red : darkred : white;
                 }
 
