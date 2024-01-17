@@ -2,7 +2,7 @@ import "./fonts/fusion-pixel-10px-proportional.ttc";
 
 export component InWindowTopBar inherits VerticalLayout
 {
-    height: 30px;
+    height: 25px;
     width: 1080px;
 
     in property <string> title;
@@ -28,6 +28,20 @@ export component InWindowTopBar inherits VerticalLayout
 
             padding-left: 5px;
             padding-right: 5px;
+            spacing: 5px;
+
+            Image 
+            {
+                y: 3px;
+                width: 18px;
+                height: 18px;
+
+                image-fit:fill;
+                image-rendering: smooth;
+
+                source: @image-url("../resources/icons/Nexus_logo_s.png");
+
+            }
 
             ApplicationTitle := Text 
             {
