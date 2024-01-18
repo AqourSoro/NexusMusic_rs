@@ -1,12 +1,12 @@
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Hash)]
 pub enum Event
 {
     Key(KeyEvent),
     Click(ClickEvent),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Hash)]
 pub enum KeyEvent
 {
     KeyPressed(char),
@@ -14,15 +14,10 @@ pub enum KeyEvent
 
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Hash)]
 pub enum ClickEvent 
 {
     SingleClick,
     DoubleClick,
     LongPress,    
-}
-
-pub trait EventHandler
-{
-    fn handle_event<'a>(&mut self, event: &'a Event);
 }

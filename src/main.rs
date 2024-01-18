@@ -3,7 +3,8 @@ use noa::log::log::*;
 use lazy_static::lazy_static;
 
 
-fn main() 
+#[tokio::main]
+async fn main() 
 {
 
     // use this lazy_static! since the logger can not be initialized at start-up of the program.

@@ -1,9 +1,12 @@
+
+
 use noa::log::log::*;
 
 pub fn start_window(logger:&'static dyn UILogger, main_title:String)
 {
     let _ = next_graphics::show_main_window(logger,main_title);
 }
+
 
 
 pub fn crate_usage<FG,FS>(func_graphics:FG, func_sounds:FS) ->usize
@@ -13,6 +16,8 @@ where
 {
     func_graphics(2,2) + func_sounds(2,2)
 }
+
+
 
 
 #[cfg(test)]

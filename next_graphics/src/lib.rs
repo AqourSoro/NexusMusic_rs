@@ -1,7 +1,6 @@
 use noa::{log::log::*,noa_ui_log, noa_log};
 use slint::{SharedString, Weak, LogicalPosition};
 
-
 slint::include_modules!();
 
 pub fn show_main_window(logger:&'static dyn UILogger, main_title:String) ->Result<(), slint::PlatformError>
