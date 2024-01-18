@@ -1,0 +1,38 @@
+import "../fonts/fusion-pixel-10px-proportional.ttc";
+import { NexusButton } from "pixelWidgets.slint";
+
+export component ControlBar inherits Rectangle 
+{
+
+
+    background: #f2aeae37;
+    callback btn1-click();
+
+    in property <length> bar-height: 60px;
+
+    width: 1080px;   
+    HorizontalLayout
+    {
+        padding: 5px;
+        spacing: 5px;
+        btn := NexusButton // name the NexusButton to "btn"
+        {
+            height: bar-height * 8%;
+            width: 100px;
+            opacity:0.7;
+            text: "Nexus";
+            clicked => 
+            {
+                btn1-click();
+            }
+        }
+
+        btn2 := NexusButton
+        {
+            height: bar-height * 8%;
+            width: 100px;
+            opacity:0.7;
+            text: "";
+        }
+    } 
+}

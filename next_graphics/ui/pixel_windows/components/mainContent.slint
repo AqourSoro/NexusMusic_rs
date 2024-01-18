@@ -1,0 +1,18 @@
+import "../fonts/fusion-pixel-10px-proportional.ttc";
+
+export component mainContent inherits Rectangle
+{
+
+    in-out property <string> content-text;
+
+    Text 
+    {
+        height: 600px;
+        font-size: 50px;
+        horizontal-alignment: center;
+        font-family: "Fusion Pixel 10px Proportional zh_hans";
+
+        text: content-text + " 你好！";
+    }
+
+}

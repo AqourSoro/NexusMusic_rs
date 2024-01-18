@@ -1,6 +1,8 @@
 import { Button} from "std-widgets.slint";
 import { InWindowTopBar } from "./components/topBarPixel.slint";
 import { SideList } from "./components/sideListPixel.slint";
+import { ControlBar } from "./components/controlBarPixel.slint";
+import { mainContent } from "./components/mainContent.slint";
 
 // import  "./fonts/ark-pixel-10px-proportional.ttc";
 // import "./fonts/VonwaonBitmap-12px.ttf";
@@ -8,27 +10,13 @@ import "./fonts/fusion-pixel-10px-proportional.ttc";
 
 
 
-
-component NexusButton inherits Button
-{
-    
-
-    clicked => 
-    { 
-        self.text = self.text + "!";
-
-    }
-
-}
-
-
 export component MainWindow inherits Window 
 {
 
     //Title of the window
-    
+
     title: "Nexus Music";
-    icon: @image-url("../resources/icons/Nexus_logo_s.png");
+    icon: @image-url("../../resources/pixels/icons/Nexus_logo_s.png");
     //background: @linear-gradient(0deg,#000000 0%,#7b6c6c 50%,#ffc5c5 100%);
     background: transparent;
     no-frame: true;
@@ -38,7 +26,7 @@ export component MainWindow inherits Window
     
 
     in property <int> text_count : 1;
-    in-out property <string> app_text;
+    in-out property <string> app-text;
     in property <string> init_content: "Initialized";
     in-out property <string> font-family;
 
@@ -46,7 +34,7 @@ export component MainWindow inherits Window
     property <length> window-width: root.width;
     default-font-family: font-family;
 
-    callback button1-click <=> btn.clicked;
+    callback button1-click();
     callback window-init(string);
     callback drag-window(length,length);
     callback window-close();
@@ -91,55 +79,41 @@ export component MainWindow inherits Window
             }
             Rectangle 
             {
-                
+                height: 96.5%;
+                padding-bottom: 5px;
+
                 VerticalLayout
                 {
-                    spacing: 5px;
-
 
                     HorizontalLayout 
                     {
                         spacing: 5px;
+                        height: 90%;
+
                         SideList 
                         {
 
                         }
 
-                        // Image 
-                        // {
-                        //     source: @image-url("../resources/icons/orange_dunks.png");
-                        //     opacity: 0.5;
-                        // }
-
-                        Text 
+                        mainContent
                         {
-                            height: 600px;
-                            font-size: 50px;
-                            font-family: "Fusion Pixel 10px Proportional zh_hans";
-
-                            text: app_text + " 你好！";
+                            content-text: app-text;
                         }
+                        
                     }
 
+                    ControlBar 
+                    {
+                        height: 10%;
+                        bar-height: root.height;
+                        btn1-click => 
+                        {
+                            button1-click();
+                        }
+                    }
                     
 
-                    HorizontalLayout
-                    {
-                        spacing: 5px;
-                        btn := NexusButton // name the NexusButton to "btn"
-                        {
-                            width: 100px;
-                            opacity:0.5;
-                            text: "Nexus";
-                        }
-
-                        btn2 := NexusButton
-                        {
-                            width: 100px;
-                            opacity:0.5;
-                            text: "";
-                        }
-                    }
+                    
                 }
             }
             

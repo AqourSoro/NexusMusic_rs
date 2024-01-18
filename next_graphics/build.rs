@@ -1,19 +1,21 @@
+use slint_build::CompilerConfiguration;
+
 fn main()
 {
-    build_pxiel_ui();
+
+    let pixel_config = slint_build::CompilerConfiguration::new()
+        .with_style("fluent-dark".into());
+
+    let pixel_path = "ui/pixel_windows/mainPixel.slint";
+
+    let pixel_style = (pixel_path, pixel_config);
+
+    build_ui(pixel_style);
     
 }
 
-fn build_pxiel_ui()
-{
-    let config = slint_build::CompilerConfiguration::new()
-        .with_style("fluent-dark".into());
 
-    slint_build::compile_with_config("ui/mainPixel.slint", config).unwrap();
-    //slint_build::compile("ui/mainPixel.slint").unwrap();
-}
-
-fn build_modern_ui()
+fn build_ui((path, config): (&str, CompilerConfiguration))
 {
-    // TODO: Add modern UI in future
+    slint_build::compile_with_config(path, config).unwrap();
 }
