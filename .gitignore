@@ -52,3 +52,4 @@ Cargo.toml.orig
 # log related
 /log
 *.log
+next_graphics/.cargo/config.toml
