@@ -29,7 +29,5 @@ path = "next_graphics"
 path = "noa"
 
 [dependencies]
-thiserror = "1.0"
-anyhow = "1.0"
 lazy_static = "1.4.0"
 tokio = { version = "1", features = ["full"] }
