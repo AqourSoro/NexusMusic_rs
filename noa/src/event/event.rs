@@ -1,12 +1,13 @@
 
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Event
 {
     Key(KeyEvent),
     Click(ClickEvent),
+    None
 }
 
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum KeyEvent
 {
     KeyPressed(char),
@@ -14,7 +15,7 @@ pub enum KeyEvent
 
 }
 
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum ClickEvent 
 {
     SingleClick,
