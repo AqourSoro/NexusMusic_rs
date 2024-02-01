@@ -25,7 +25,7 @@ impl Invokable for DefaultListener
     fn Invoke(&mut self, event:Event) 
     {
         let ref_listener = self.listeners.clone();
-        let callbacks = ref_listener.into_iter().filter(|listener|
+        let callbacks:Vec<Weak<RefCell<(Event, dyn Fn(&Event) + 'static)>>> = ref_listener.into_iter().filter(|listener|
         {
             if let Some(weak_listener) = listener.upgrade()
             {
@@ -44,6 +44,6 @@ impl Invokable for DefaultListener
                 debug!("Weak reference is no longer valid");
                 return false;
             }
-        });
+        }).collect();
     }
 }
