@@ -1,5 +1,5 @@
 use nexus_music::*;
-use noa::log::log::*;
+use noa::{event::event_handler, log::log::*};
 use lazy_static::lazy_static;
 
 
@@ -14,12 +14,15 @@ async fn main()
         static ref NEXUS_LOGGER: NexusLogger = NexusLogger::new(NoaLoggerConfig::Default);
     }
 
+
     let ui_logger: &'static dyn UILogger = &*NEXUS_LOGGER;
 
     let title = String::from("Nexus Music");
 
     start_window(ui_logger, title);
     
+
+
     
 }
 
