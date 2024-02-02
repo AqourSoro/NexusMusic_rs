@@ -4,6 +4,7 @@ pub enum Event
 {
     Key(KeyEvent),
     Click(ClickEvent),
+    Test,
     None
 }
 

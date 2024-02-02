@@ -1,5 +1,7 @@
+use std::{cell::RefCell, fmt::Debug, sync::Arc};
+
 use nexus_music::*;
-use noa::{event::event_handler, log::log::*};
+use noa::{event::event_handler::{self, DefaultListener, Dispatchable, EventBind, Invokable}, log::log::*, noa_log};
 use lazy_static::lazy_static;
 
 
@@ -14,10 +16,39 @@ async fn main()
         static ref NEXUS_LOGGER: NexusLogger = NexusLogger::new(NoaLoggerConfig::Default);
     }
 
+    let mut listeners = DefaultListener::new();
+    let n_listener = Arc::new(RefCell::new(EventBind
+    {
+        event: noa::event::event::Event::Test,
+        callback:Box::new(|e|
+        {
+            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback executed with e!"), "main()");
+        })
+    }));
+
+    let t_listener = Arc::new(RefCell::new(EventBind
+    {
+        event: noa::event::event::Event::Test,
+        callback:Box::new(|e|
+        {
+            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback executed with e!"), "main()");
+        })
+    }));
+
+    listeners.add_listener(n_listener);
+    listeners.add_listener(t_listener);
+
+
+    noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback added?"), "main()");
 
     let ui_logger: &'static dyn UILogger = &*NEXUS_LOGGER;
 
+    listeners.invoke(noa::event::event::Event::Test);
+
+
     let title = String::from("Nexus Music");
+
+
 
     start_window(ui_logger, title);
     

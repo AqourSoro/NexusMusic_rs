@@ -1,37 +1,73 @@
-use std::{cell::RefCell, rc::Weak, sync::Arc};
+use std::{cell::RefCell, sync::Weak, sync::Arc};
 
 use log::debug;
 
 use super::event::Event;
 
 
+pub trait Bindable<T>
+{
+    fn bind(callbackcell:RefCell< dyn Fn(&T) + 'static>);
+}
+
+pub struct Bind<T>
+{
+    pub event: T,
+    pub callback: dyn Fn(&T) + 'static
+}
+
+pub struct EventBind
+{
+    pub event: Event,
+    pub callback: Box<dyn Fn(&Event) + 'static>
+}
+
+
+
+
 pub trait Invokable
 {
-    fn Invoke(&mut self, event:Event);
+    fn invoke(&mut self, event:Event);
 }
 
 pub trait Dispatchable
 {
-    fn add_listener(&mut self, listener:Arc<RefCell<(Event, impl Fn(&Event) + 'static)>>); 
+    fn add_listener(&mut self, listener:Arc<RefCell<EventBind>>); 
 }
 
 pub struct DefaultListener
 {
-    listeners: Vec<Weak<RefCell<(Event, dyn Fn(&Event) + 'static)>>> 
+    listeners: Vec<Weak<RefCell<EventBind>>> 
+}
+
+impl DefaultListener
+{
+    pub fn new() -> DefaultListener
+    {
+        debug!("Create one defaultListener");
+        DefaultListener
+        {
+            listeners: Vec::new()
+        }
+    }
 }
 
 impl Invokable for DefaultListener
 {
-    fn Invoke(&mut self, event:Event) 
+    // TODO: Fix error that upgrade get nothing!
+    fn invoke(&mut self, event_to_invoke:Event) 
     {
         let ref_listener = self.listeners.clone();
-        let callbacks:Vec<Weak<RefCell<(Event, dyn Fn(&Event) + 'static)>>> = ref_listener.into_iter().filter(|listener|
+        debug!("listener num: {}", ref_listener.len());
+
+        let callbacks:Vec<Weak<RefCell<EventBind>>> = ref_listener.iter().filter(|&listener|
         {
+            debug!("This is: {:?}", listener);
             if let Some(weak_listener) = listener.upgrade()
             {
                 if let Ok(listener) = weak_listener.try_borrow()
                 {
-                    return event == listener.0;
+                    return event_to_invoke == listener.event;
                 }
                 else
                 {
@@ -41,9 +77,36 @@ impl Invokable for DefaultListener
             }
             else 
             {
-                debug!("Weak reference is no longer valid");
+                println!("What?");
+                debug!("Weak reference is no longer valid: {:?}", listener);
+                debug!("listener num: {}", ref_listener.len());
                 return false;
             }
-        }).collect();
+        }).cloned().collect();
+
+        for callback_weak in callbacks
+        {
+            if let Some(callback_cell) = callback_weak.upgrade()
+            {
+                let eventbind = &*callback_cell.borrow();
+
+                (eventbind.callback)(&eventbind.event);
+            }
+            else 
+            {
+                debug!("No callback found.");
+            }
+        }
+
+    }
+}
+
+impl Dispatchable for DefaultListener
+{
+    fn add_listener(&mut self, listener:Arc<RefCell<EventBind>>) 
+    {
+        debug!("Add a listener!");
+        println!("Add a listener!");
+        self.listeners.push(Arc::downgrade(&listener));
     }
 }
