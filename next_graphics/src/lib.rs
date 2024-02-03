@@ -1,4 +1,10 @@
-use noa::{log::log::*,noa_ui_log, noa_log};
+use std::cell::RefCell;
+use std::sync::Arc;
+
+use noa::event::event::Event as Event;
+use noa::event::event::ClickEvent as ClickEvent;
+
+use noa::{event::event_handler::{DefaultListener, Dispatchable, EventBind, Invokable}, log::log::*, noa_log, noa_ui_log};
 use slint::{SharedString, Weak, LogicalPosition};
 
 slint::include_modules!();
@@ -35,16 +41,65 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger)
 
     let ui_to_move = ui_handler.unwrap().as_weak();
 
+    let mut ui_listeners = DefaultListener::new();
+
+    
+    let test_listener = Arc::new(RefCell::new(EventBind
+    {
+        event: Event::Test,
+        callback: Box::new(|e|
+        {
+            noa_ui_log!(logger, LogLevel::DEBUG("Call from UI threadS!"),stringify!(show_main_window(title:SharedString)));
+        })
+    }));
+
+    let test_button_event = Arc::new(RefCell::new(EventBind
+    {
+        event: Event::Click(ClickEvent::SingleClick),
+        callback: Box::new(|e|
+        {
+            noa_ui_log!(logger, LogLevel::DEBUG("Button Clicked!"), stringify!(show_main_window(title:SharedString)));
+        })
+    }));
+
+    ui_listeners.add_listener(test_listener);
+    ui_listeners.add_listener(test_button_event);
+    //let mut mult_listeners = Arc::new(RefCell::new(ui_listeners));
+
+    //let weak_listeners =Arc::downgrade(&mult_listeners);
+
+    let arc_listeners = Arc::new(ui_listeners);
+
+    let windown_listener = Arc::clone(&arc_listeners);
+    let button_listener = Arc::clone(&arc_listeners);
+    //let weak_listeners_2 = weak_listeners.clone();
+
     ui.on_window_init(move|title|
     {
         let ui = ui_handler.unwrap();
         ui.set_app_text(title);
+
+        //ui_listeners.invoke(Event::Test);
+        // if let Some(listener) = weak_listeners.upgrade()
+        // {
+        //     listener.borrow().invoke(Event::Test);
+        // }
+        
+        windown_listener.invoke(Event::Test);
+
         noa_ui_log!(logger, LogLevel::INFO("Slint UI is initialized"), stringify!(show_main_window(title:SharedString)));
     });
 
     ui.on_button1_click(move||
     {
         noa_ui_log!(logger, LogLevel::DEBUG("button cliked"), stringify!(ui.on_button1_click()));
+        
+        button_listener.invoke(Event::Click(ClickEvent::SingleClick));
+
+        // if let Some(listener) = weak_listeners.upgrade()
+        // {
+        //     listener.borrow().invoke(Event::Click(ClickEvent::SingleClick));
+        // }
     });
 
     ui.on_drag_window(move |offset_x, offset_y|

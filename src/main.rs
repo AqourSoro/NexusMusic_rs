@@ -14,6 +14,7 @@ async fn main()
     lazy_static!
     {
         static ref NEXUS_LOGGER: NexusLogger = NexusLogger::new(NoaLoggerConfig::Default);
+        
     }
 
     let mut listeners = DefaultListener::new();
@@ -31,7 +32,7 @@ async fn main()
         event: noa::event::event::Event::Test,
         callback:Box::new(|e|
         {
-            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback executed with e!"), "main()");
+            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback executed with {e}!"), "main()");
         })
     }));
 
@@ -39,7 +40,7 @@ async fn main()
     listeners.add_listener(t_listener);
 
 
-    noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback added?"), "main()");
+    //noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback added?"), "main()");
 
     let ui_logger: &'static dyn UILogger = &*NEXUS_LOGGER;
 
