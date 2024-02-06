@@ -7,14 +7,14 @@ use super::event::Event;
 
 pub trait Bindable<T>
 {
-    fn bind(callbackcell:RefCell< dyn Fn(&T) + 'static>);
+    fn bind(callbackcell:RefCell<dyn Fn(&T) + 'static>);
 }
 
 
 pub struct Bind<T>
 {
     pub event: T,
-    pub callback: dyn Fn(&T) + 'static
+    pub callback: Box<dyn Fn(&T) + 'static>
 }
 
 
@@ -24,6 +24,14 @@ pub struct EventBind
     pub callback: Box<dyn Fn(&Event) + 'static>
 }
 
+pub struct EventS
+{
+    pub event:Event,
+    callbacks:Vec<Option<Box<dyn Fn(&Event) + 'static>>>
+}
+//event.register(|| {});
+//event.unregister();
+//event.send();
 
 
 
@@ -59,8 +67,8 @@ impl Invokable for DefaultListener
     // TODO: Fix error that upgrade get nothing!
     fn invoke(&self, event_to_invoke:Event) 
     {
-        let ref_listener = self.listeners.clone();
-        debug!("listener num: {}", ref_listener.len());
+        debug!("listener num: {}", self.listeners.len());
+
 
         for listener in &self.listeners
         {
@@ -73,46 +81,6 @@ impl Invokable for DefaultListener
 
         }
 
-        // let callbacks:Vec<Weak<RefCell<EventBind>>> = ref_listener.iter().filter(|&listener|
-        // {
-        //     debug!("This is: {:?}", listener);
-
-            
-
-        //     if let Some(weak_listener) = listener.upgrade()
-        //     {
-        //         if let Ok(listener) = weak_listener.try_borrow()
-        //         {
-        //             return event_to_invoke == listener.event;
-        //         }
-        //         else
-        //         {
-        //             debug!("Failed to borrow the RefCell");
-        //             return false;
-        //         }
-        //     }
-        //     else 
-        //     {
-        //         debug!("What?");
-        //         debug!("Weak reference is no longer valid: {:?}", listener);
-        //         debug!("listener num: {}", ref_listener.len());
-        //         return false;
-        //     }
-        // }).cloned().collect();
-
-        // for callback_weak in callbacks
-        // {
-        //     if let Some(callback_cell) = callback_weak.upgrade()
-        //     {
-        //         let eventbind = &*callback_cell.borrow();
-
-        //         (eventbind.callback)(&eventbind.event);
-        //     }
-        //     else 
-        //     {
-        //         debug!("No callback found.");
-        //     }
-        // }
 
     }
 }

@@ -49,7 +49,7 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger)
         event: Event::Test,
         callback: Box::new(|e|
         {
-            noa_ui_log!(logger, LogLevel::DEBUG("Call from UI threadS!"),stringify!(show_main_window(title:SharedString)));
+            noa_ui_log!(logger, LogLevel::DEBUG(format!("Call from UI threads with event {:?}!",e).as_str()),stringify!(show_main_window(title:SharedString)));
         })
     }));
 
@@ -58,7 +58,7 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger)
         event: Event::Click(ClickEvent::SingleClick),
         callback: Box::new(|e|
         {
-            noa_ui_log!(logger, LogLevel::DEBUG("Button Clicked!"), stringify!(show_main_window(title:SharedString)));
+            noa_ui_log!(logger, LogLevel::DEBUG(format!("Event {:?} received! Button clicked!",e).as_str()), stringify!(show_main_window(title:SharedString)));
         })
     }));
 

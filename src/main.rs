@@ -2,6 +2,7 @@ use std::{cell::RefCell, fmt::Debug, sync::Arc};
 
 use nexus_music::*;
 use noa::{event::event_handler::{self, DefaultListener, Dispatchable, EventBind, Invokable}, log::log::*, noa_log};
+use noa::event::new_event::Event;
 use lazy_static::lazy_static;
 
 
@@ -23,7 +24,7 @@ async fn main()
         event: noa::event::event::Event::Test,
         callback:Box::new(|e|
         {
-            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback executed with e!"), "main()");
+            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG(format!("Callback executed with {:?} event!", e).as_str()), "main()");
         })
     }));
 
@@ -32,7 +33,7 @@ async fn main()
         event: noa::event::event::Event::Test,
         callback:Box::new(|e|
         {
-            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback executed with {e}!"), "main()");
+            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG(format!("Callback executed with {:?} event!", e).as_str()), "main()");
         })
     }));
 
