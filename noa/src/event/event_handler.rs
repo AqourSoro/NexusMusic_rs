@@ -24,11 +24,6 @@ pub struct EventBind
     pub callback: Box<dyn Fn(&Event) + 'static>
 }
 
-pub struct EventS
-{
-    pub event:Event,
-    callbacks:Vec<Option<Box<dyn Fn(&Event) + 'static>>>
-}
 //event.register(|| {});
 //event.unregister();
 //event.send();

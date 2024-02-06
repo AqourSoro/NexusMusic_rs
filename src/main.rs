@@ -2,7 +2,7 @@ use std::{cell::RefCell, fmt::Debug, sync::Arc};
 
 use nexus_music::*;
 use noa::{event::event_handler::{self, DefaultListener, Dispatchable, EventBind, Invokable}, log::log::*, noa_log};
-use noa::event::new_event::Event;
+use noa::event::{utils,new_event::Event};
 use lazy_static::lazy_static;
 
 
@@ -17,6 +17,8 @@ async fn main()
         static ref NEXUS_LOGGER: NexusLogger = NexusLogger::new(NoaLoggerConfig::Default);
         
     }
+
+    let a:String = String::from("value");
 
     let mut listeners = DefaultListener::new();
     let n_listener = Arc::new(RefCell::new(EventBind

@@ -10,6 +10,7 @@ pub mod event
     pub mod event_handler;
     pub mod event_pool;
     pub mod new_event;
+    pub mod utils;
 }
 
 

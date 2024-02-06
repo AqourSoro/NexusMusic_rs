@@ -2,56 +2,71 @@ use std::collections::HashMap;
 
 
 #[derive(Debug)]
-pub enum Event<T>
+pub enum Event
 {
     None,
-    Default(T),
+    Default(String),
+    Key(KeyEvent),
+    Mouse(MouseEvent)
 
 }
+#[derive(Debug)]
+enum KeyEvent
+{
+    KeyPressed(char),
+    KeyReleased(char)
 
-pub type EventListenerList<T> = Vec<Box<dyn Fn(&Event<T>) + 'static>>;
+} 
+#[derive(Debug)]
+enum MouseEvent 
+{
+    SingleClick(char),
+    DoubleClick(char),
+    LongPress(char),    
+}
+
+
+pub type EventListenerList = Vec<Box<dyn Fn(&Event) + 'static>>;
 const EVENTMANAGER_QUEUES_NUM: u8 = 2;
 
-pub struct EventManager<T>
+pub struct EventManager
 {
     
-    listeners_map: HashMap<Event<T>, EventListenerList<T>>,
-    event_queue: Vec<Event<T>>,
+    listeners_map: HashMap<Event, EventListenerList>,
+    event_queue: Vec<Event>,
 
 }
 
-trait Eventable<T>
-{
-    fn as_event(event_data:T) -> Event<T>
-    {
-        Event::Default(event_data)
-    }
-}
 
-trait EventManagable<T>
+
+trait EventManagable
 {
-    fn add_listener(event:Event<T>, callback: dyn Fn(&Event<T>) + 'static);
-    fn remove_listener(event:Event<T>);
-    fn queue_event(&mut self, event:Event<T>);
-    fn abort_event(&mut self, event:Event<T>);
+    fn add_listener(event:Event, callback: dyn Fn(&Event) + 'static);
+    fn remove_listener(event:Event);
+    fn queue_event(&mut self, event:Event);
+    fn abort_event(&mut self, event:Event);
     fn update(&mut self);
 }
 
-pub trait Invoker<T>
+pub trait Invoker
 {
-    fn send(&self, event:Event<T>);
+    fn send(&self, event:Event);
 }
 
-pub trait Register<T> 
+pub trait Register 
 {
-    fn register(&self, callback: Box<dyn Fn(&Event<T>) + 'static>);
+    fn register(&self, callback: Box<dyn Fn(&Event) + 'static>);
     fn unregister(&self);
 }
 
-
-impl<T> Register<T> for Event<T>
+impl EventManager
 {
-    fn register(&self, callback: Box<dyn Fn(&Event<T>) + 'static>) 
+    
+}
+
+impl Register for Event
+{
+    fn register(&self, callback: Box<dyn Fn(&Event) + 'static>) 
     {
         
     }
