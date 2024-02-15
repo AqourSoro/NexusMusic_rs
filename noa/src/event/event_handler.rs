@@ -62,7 +62,7 @@ impl Invokable for DefaultListener
     // TODO: Fix error that upgrade get nothing!
     fn invoke(&self, event_to_invoke:Event) 
     {
-        debug!("listener num: {}", self.listeners.len());
+        //debug!("listener num: {}", self.listeners.len());
 
 
         for listener in &self.listeners

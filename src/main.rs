@@ -1,13 +1,14 @@
-use std::{cell::RefCell, fmt::Debug, sync::Arc};
+use std::{cell::RefCell, fmt::Debug, sync::{mpsc, Arc}};
 
 use nexus_music::*;
 use noa::{event::event_handler::{self, DefaultListener, Dispatchable, EventBind, Invokable}, log::log::*, noa_log};
-use noa::event::{utils,new_event::Event};
 use lazy_static::lazy_static;
+//use tokio::sync::mpsc;
 
+use noa::event::thread_event::EventHandler as EventHandler;
+use std::thread;
 
-#[tokio::main]
-async fn main() 
+fn main() 
 {
 
     // use this lazy_static! since the logger can not be initialized at start-up of the program.
@@ -18,36 +19,18 @@ async fn main()
         
     }
 
-    let a:String = String::from("value");
+    let (event_sender, event_receiver) = mpsc::channel();
+    let event_handler = EventHandler::new(event_receiver);
 
-    let mut listeners = DefaultListener::new();
-    let n_listener = Arc::new(RefCell::new(EventBind
-    {
-        event: noa::event::event::Event::Test,
-        callback:Box::new(|e|
-        {
-            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG(format!("Callback executed with {:?} event!", e).as_str()), "main()");
-        })
-    }));
-
-    let t_listener = Arc::new(RefCell::new(EventBind
-    {
-        event: noa::event::event::Event::Test,
-        callback:Box::new(|e|
-        {
-            noa_log!(NEXUS_LOGGER,LogLevel::DEBUG(format!("Callback executed with {:?} event!", e).as_str()), "main()");
-        })
-    }));
-
-    listeners.add_listener(n_listener);
-    listeners.add_listener(t_listener);
+    // Spawn a thread for event handling
+    let handler_thread = thread::spawn(move || {
+        event_handler.start_handling_events();
+    });
 
 
     //noa_log!(NEXUS_LOGGER,LogLevel::DEBUG("Callback added?"), "main()");
 
     let ui_logger: &'static dyn UILogger = &*NEXUS_LOGGER;
-
-    listeners.invoke(noa::event::event::Event::Test);
 
 
     let title = String::from("Nexus Music");
