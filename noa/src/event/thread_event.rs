@@ -3,6 +3,9 @@ use std::collections::HashMap;
 use std::fmt::Debug;
 use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
+use std::sync::mpsc::SendError;
+
+use super::event;
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
 pub enum EventType
@@ -66,6 +69,16 @@ impl EventBehaviour for Event {
 
 impl Event
 {
+
+    pub fn new(event_type: EventType, data: Box<dyn EventDataBehaviour>) -> Self
+    {
+        Event
+        {
+            event_type,
+            data
+        }
+    }
+
     fn get_data(&self) -> &Box<dyn EventDataBehaviour>
     {
         &self.data
@@ -80,13 +93,15 @@ pub enum Message {
     RegisterEvent(EventType, TypedCallback),
     UnregisterEvent(EventType),
     SendEvent(Box<dyn EventBehaviour>),
+    Terminate
 }
 
 // Trait for interacting with the centralized event handler
-trait EventHandlerClient {
+pub trait EventHandlerClient {
     fn register_event(&self, event: EventType, callback: TypedCallback);
     fn unregister_event(&self, event: EventType);
     fn send_event(&self, event: Box<dyn EventBehaviour>);
+    fn terminate_event_threads(&self) -> Result<(), SendError<Message>>;
 }
 
 pub struct EventHandler {
@@ -115,6 +130,7 @@ impl EventHandler {
                 Message::SendEvent(event) => {
                     self.handle_event(event);
                 }
+                Message::Terminate => break
             }
         }
     }
@@ -154,3 +170,42 @@ impl EventHandler {
     }
 }
 
+pub struct NexusEventSender
+{
+    event_sender: mpsc::Sender<Message>,
+}
+
+impl EventHandlerClient for NexusEventSender {
+    fn register_event(&self, event: EventType, callback: TypedCallback) {
+        // Send a registration message to the event handler
+        self.event_sender.send(Message::RegisterEvent(event, callback)).unwrap();
+    }
+
+    fn unregister_event(&self, event: EventType) {
+        // Send an unregistration message to the event handler
+        self.event_sender.send(Message::UnregisterEvent(event)).unwrap();
+    }
+
+    fn send_event(&self, event: Box<dyn EventBehaviour>) {
+        // Send the event to the event handler
+        self.event_sender.send(Message::SendEvent(event)).unwrap();
+    }
+    
+    fn terminate_event_threads(&self) -> Result<(), SendError<Message>>
+    {
+        self.event_sender.send(Message::Terminate)   
+    }
+}
+
+impl NexusEventSender
+{
+    pub fn new(event_sender: mpsc::Sender<Message>) -> Self
+    {
+        NexusEventSender
+        {
+            event_sender
+        }
+    }
+}
+
+pub type GlobalEventSender = Arc<Option<NexusEventSender>>;

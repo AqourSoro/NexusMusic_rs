@@ -45,7 +45,7 @@ pub enum LogType
     UI,
 }
 
-pub trait ConsoleLogger
+pub trait ConsoleLogger: Send + Sync
 {
     fn log(&self, level: LogLevel, location:&str, lines: u32) 
     {
@@ -62,7 +62,7 @@ pub trait ConsoleLogger
     fn print_logo(&self);
 }
 
-pub trait UILogger
+pub trait UILogger: Send + Sync
 {
     fn log(&self, level: LogLevel, location:&str, lines: u32)
     {

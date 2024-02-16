@@ -1,10 +1,12 @@
 
 
-use noa::log::log::*;
+use noa::{event::thread_event::{EventHandlerClient, GlobalEventSender, NexusEventSender}, log::log::*, noa_ui_log};
+use std::sync::{Arc, Mutex};
 
-pub fn start_window(logger:&'static dyn UILogger, main_title:String)
+
+pub fn start_window(logger:&'static dyn UILogger, event_sender: &'static dyn EventHandlerClient,main_title:String)
 {
-    let _ = next_graphics::show_main_window(logger,main_title);
+    let _ = next_graphics::show_main_window(logger,event_sender,main_title);
 }
 
 

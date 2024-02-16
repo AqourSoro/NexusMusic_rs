@@ -1,15 +1,21 @@
+use std::borrow::Borrow;
 use std::cell::RefCell;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 
 use noa::event::event::Event as Event;
 use noa::event::event::ClickEvent as ClickEvent;
 
+use noa::event::thread_event::{EventData, EventHandlerClient, GlobalEventSender, NexusEventSender, Event as TEvent, EventType as EventType};
 use noa::{event::event_handler::{DefaultListener, Dispatchable, EventBind, Invokable}, log::log::*, noa_log, noa_ui_log};
 use slint::{SharedString, Weak, LogicalPosition};
 
+
 slint::include_modules!();
 
-pub fn show_main_window(logger:&'static dyn UILogger, main_title:String) ->Result<(), slint::PlatformError>
+
+
+
+pub fn show_main_window(logger:&'static dyn UILogger, event_sender: &'static dyn EventHandlerClient, main_title:String) ->Result<(), slint::PlatformError>
 {
     let result = MainWindow::new();
     let ui = result.and_then(|window|
@@ -22,7 +28,7 @@ pub fn show_main_window(logger:&'static dyn UILogger, main_title:String) ->Resul
 
     let _title = SharedString::from(main_title);
 
-    init_ui_callbacks(_ui_handle, logger);
+    init_ui_callbacks(_ui_handle, logger, event_sender);
     
 
     ui.invoke_window_init(_title);
@@ -32,7 +38,7 @@ pub fn show_main_window(logger:&'static dyn UILogger, main_title:String) ->Resul
 }
 
 
-fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger)
+fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger, event_sender: &'static dyn EventHandlerClient)
 {
 
     let ui = ui_handler.unwrap();
@@ -94,12 +100,10 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger)
     {
         noa_ui_log!(logger, LogLevel::DEBUG("button cliked"), stringify!(ui.on_button1_click()));
         
+        event_sender.send_event(Box::new(TEvent::new(EventType::String, Box::new(EventData::String("button 1".to_string())))));
+
         button_listener.invoke(Event::Click(ClickEvent::SingleClick));
 
-        // if let Some(listener) = weak_listeners.upgrade()
-        // {
-        //     listener.borrow().invoke(Event::Click(ClickEvent::SingleClick));
-        // }
     });
 
     ui.on_drag_window(move |offset_x, offset_y|
@@ -120,7 +124,7 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger)
     ui.on_window_close(move ||
     {
         noa_ui_log!(logger, LogLevel::DEBUG("close window button clicked"), stringify!(ui.on_window_close()));
-        
+        //event_sender.send_event(Box::new(TEvent::new(EventType::Int, Box::new(EventData::U64(0)))));
         ui_to_close.hide().unwrap();
         noa_ui_log!(logger, LogLevel::INFO("Application closed."), stringify!(ui.on_window_close()));
     });
