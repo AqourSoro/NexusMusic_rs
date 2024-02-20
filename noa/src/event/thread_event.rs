@@ -2,10 +2,8 @@ use std::any::Any;
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::sync::{mpsc, Arc, Mutex};
-use std::thread;
 use std::sync::mpsc::SendError;
 
-use super::event;
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
 pub enum EventType
@@ -93,7 +91,7 @@ pub enum Message {
     RegisterEvent(EventType, TypedCallback),
     UnregisterEvent(EventType),
     SendEvent(Box<dyn EventBehaviour>),
-    Terminate
+    Terminate // Not useful right now
 }
 
 // Trait for interacting with the centralized event handler

@@ -6,8 +6,6 @@ pub mod log
 
 pub mod event
 {
-    pub mod event;
-    pub mod event_handler;
     pub mod thread_event;
     pub mod utils;
 }
