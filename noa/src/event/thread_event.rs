@@ -65,6 +65,13 @@ impl EventBehaviour for Event {
 
 }
 
+impl From<String> for Box<dyn EventDataBehaviour> 
+{
+    fn from(data: String) -> Self {
+        Box::new(EventData::String(data))
+    }
+}
+
 impl Event
 {
 

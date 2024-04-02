@@ -3,7 +3,7 @@ use std::cell::RefCell;
 use std::sync::{Arc, Mutex};
 
 
-use noa::event::thread_event::{EventData, EventHandlerClient, GlobalEventSender, NexusEventSender, Event as TEvent, EventType as EventType};
+use noa::event::thread_event::{EventData, EventHandlerClient, GlobalEventSender, NexusEventSender, Event, EventType};
 use noa::{log::log::*, noa_log, noa_ui_log};
 use slint::{SharedString, Weak, LogicalPosition};
 
@@ -59,7 +59,7 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger,
     {
         noa_ui_log!(logger, LogLevel::DEBUG("button cliked"), stringify!(ui.on_button1_click()));
         
-        event_sender.send_event(Box::new(TEvent::new(EventType::String, Box::new(EventData::String("button 1".to_string())))));
+        event_sender.send_event(Box::new(Event::new(EventType::String, "button 1".to_string().into())));
 
 
     });
@@ -82,7 +82,6 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger,
     ui.on_window_close(move ||
     {
         noa_ui_log!(logger, LogLevel::DEBUG("close window button clicked"), stringify!(ui.on_window_close()));
-        //event_sender.send_event(Box::new(TEvent::new(EventType::Int, Box::new(EventData::U64(0)))));
         ui_to_close.hide().unwrap();
         noa_ui_log!(logger, LogLevel::INFO("Application closed."), stringify!(ui.on_window_close()));
     });

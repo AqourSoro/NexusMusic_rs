@@ -26,13 +26,13 @@ async fn main() {
 
     // register an event for test:
     nexus_sender.register_event(EventType::String, Box::new(|event_data|
+    {
+        if let Some(data) = event_data.get_data().downcast_ref::<String>()
         {
-            if let Some(data) = event_data.get_data().downcast_ref::<String>()
-            {
-                noa_log!(console_logger, LogLevel::INFO(format!("Event received: {}", data).as_str()), stringify!(fn main()));
-            }
-            
-        }));
+            noa_log!(console_logger, LogLevel::INFO(format!("Event received: {}", data).as_str()), stringify!(fn main()));
+        }
+        
+    }));
 
     let title = String::from("Nexus Music");
 
