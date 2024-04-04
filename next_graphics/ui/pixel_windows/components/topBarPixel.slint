@@ -11,9 +11,17 @@ export component InWindowTopBar inherits VerticalLayout
 
     // if mouse button is pressed.
     property <bool> drag-area-pressed: false;
+
+    property <bool> can-drag:false;
+    property <bool> draging:false;
+
     // record the position of the press.
-    property <length> drag-area-down-x: 0;
-    property <length> drag-area-down-y: 0;
+    out property <length> drag-area-down-x: 0;
+    out property <length> drag-area-down-y: 0;
+
+    property <length> component-x: self.absolute-position.x;
+    property <length> component-y: self.absolute-position.y;
+
     property <length> corner-radius: 8px;
 
     callback move-window(length, length);
@@ -64,14 +72,29 @@ export component InWindowTopBar inherits VerticalLayout
                 {
                     moved => 
                     {
-                        move-window(self.mouse-x - drag-area-down-x, 
-                                    self.mouse-y - drag-area-down-y);
+                        if(can-drag)
+                        {
+                            move-window(self.mouse-x - self.pressed-x, 
+                                self.mouse-y - self.pressed-y);
+                        }
                     }
                     pointer-event(e) => 
                     {
-                        drag-area-pressed = e.kind == PointerEventKind.down;
-                        drag-area-down-x = self.mouse-x;
-                        drag-area-down-y = self.mouse-y;
+                        // debug(e.button);
+                        // debug(e.kind);
+                        
+                        if(e.button == PointerEventButton.left && e.kind == PointerEventKind.down)
+                        {
+                            can-drag = true;
+                        }
+                        if(e.kind == PointerEventKind.up)
+                        {
+                            can-drag = false;
+                        }
+                        draging = can-drag && e.kind == PointerEventKind.move;
+                        // debug(can-drag);
+                        // debug(draging);
+                        
                     }
                 }
             }

@@ -29,7 +29,7 @@ export component MainWindow inherits Window
     in-out property <string> app-text;
     in property <string> init_content: "Initialized";
     in-out property <string> font-family;
-
+    
     property <length> window-height: root.height;
     property <length> window-width: root.width;
     default-font-family: font-family;
@@ -61,7 +61,7 @@ export component MainWindow inherits Window
             //spacing: 5px;
             
 
-            InWindowTopBar 
+            topbar:= InWindowTopBar 
             {
 
                 title: root.title;
