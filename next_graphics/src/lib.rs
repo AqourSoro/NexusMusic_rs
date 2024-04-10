@@ -73,7 +73,7 @@ fn init_ui_callbacks(ui_handler: Weak<MainWindow>, logger:&'static dyn UILogger,
 
         main.window().set_position(LogicalPosition::new(_new_x, _new_y));
         let location_log = format!("Window moved to new location: x: {}, y: {}", _new_x, _new_y);
-        noa_ui_log!(logger, LogLevel::INFO(location_log.as_str()), stringify!(ui.on_drag_window(offset_x:f32, offset_y:f32)));
+        noa_ui_log!(logger, LogLevel::TRACE(location_log.as_str()), stringify!(ui.on_drag_window(offset_x:f32, offset_y:f32)));
 
     });
 
